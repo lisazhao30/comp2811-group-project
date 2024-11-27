@@ -7,70 +7,48 @@
 using namespace std;
 
 
-void QuakeDataset::loadData(const string& filename)
+void WaterDataset::loadData(const string& filename)
 {
   csv::CSVReader reader(filename);
-
   data.clear();
 
   for (const auto& row: reader) {
-    Quake quake{
-      row["time"].get<>(),
-      row["latitude"].get<double>(),
-      row["longitude"].get<double>(),
-      row["depth"].get<double>(),
-      row["mag"].get<double>()
+    ResultQualifierNotation result_qualifier_notation = ResultQualifierNotation::Empty;
+    std::string result_qualifier_string = row["resultQualifier.notation"].get<>();
+
+    if (result_qualifier_string == "<") {
+      result_qualifier_notation = ResultQualifierNotation::LessThan;
+    }
+    else if (result_qualifier_string == ">") {
+      result_qualifier_notation = ResultQualifierNotation::GreaterThan;
+    }
+
+    bool is_compliance_sample = row["sample.isComplianceSample"].get<>() == "true";
+
+    WaterSample water_sample{
+      row["@id"].get<>(),
+      row["sample.samplingPoint"].get<>(),
+      row["sample.samplingPoint.notation"].get<>(),
+      row["sample.samplingPoint.label"].get<>(),
+      row["sample.sampleDateTime"].get<>(),
+      row["determinand.label"].get<>(),
+      row["determinand.definition"].get<>(),
+      row["determinand.notation"].get<int16_t>(),
+      result_qualifier_notation,
+      row["result"].get<double>(),
+      row["determinand.unit.label"].get<>(),
+      row["sample.sampledMaterialType.label"].get<>(),
+      is_compliance_sample,
+      row["sample.purpose.label"].get<>(),
+      row["sample.samplingPoint.easting"].get<int32_t>(),
+      row["sample.samplingPoint.northing"].get<int32_t>()
     };
-    data.push_back(quake);
+    data.push_back(water_sample);
   }
 }
 
 
-Quake QuakeDataset::strongest() const
-{
-  checkDataExists();
-
-  auto quake = max_element(data.begin(), data.end(),
-    [](Quake a, Quake b) { return a.getMagnitude() < b.getMagnitude(); });
-
-  return *quake;
-}
-
-
-Quake QuakeDataset::shallowest() const
-{
-  checkDataExists();
-
-  auto quake = min_element(data.begin(), data.end(),
-    [](Quake a, Quake b) { return a.getDepth() < b.getDepth(); });
-
-  return *quake;
-}
-
-
-double QuakeDataset::meanDepth() const
-{
-  checkDataExists();
-
-  auto sum = accumulate(data.begin(), data.end(), 0.0,
-    [](double total, Quake q) { return total + q.getDepth(); });
-
-  return sum / data.size();
-}
-
-
-double QuakeDataset::meanMagnitude() const
-{
-  checkDataExists();
-
-  auto sum = accumulate(data.begin(), data.end(), 0.0,
-    [](double total, Quake q) { return total + q.getMagnitude(); });
-
-  return sum / data.size();
-}
-
-
-void QuakeDataset::checkDataExists() const
+void WaterDataset::checkDataExists() const
 {
   if (size() == 0) {
     throw std::runtime_error("Dataset is empty!");

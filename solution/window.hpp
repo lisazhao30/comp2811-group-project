@@ -12,34 +12,23 @@ class QPushButton;
 class QTableView;
 class StatsDialog;
 
-class QuakeWindow: public QMainWindow
+class WaterSampleWindow: public QMainWindow
 {
   Q_OBJECT
 
   public:
-    QuakeWindow();
+    WaterSampleWindow();
 
   private:
     void createMainWidget();
-    void createFileSelectors();
-    void createButtons();
     void createToolBar();
-    void createStatusBar();
-    void addFileMenu();
-    void addHelpMenu();
+    void createButtons();
 
-    QuakeModel model;          // data model used by table
-    QString dataLocation;      // location of CSV data files
-    QComboBox* significance;   // selector for quake feed significance level
-    QComboBox* period;         // selector for quake feed time period
+    WaterSampleModel model;          // data model used by table
+    QTableView* table;         // table of water sample data
     QPushButton* loadButton;   // button to load a new CSV file
-    QPushButton* statsButton;  // button to display dataset stats
-    QTableView* table;         // table of quake data
-    QLabel* fileInfo;          // status bar info on current file
-    StatsDialog* statsDialog;  // dialog to display stats
 
   private slots:
-    void setDataLocation();
     void openCSV();
     void displayStats();
     void about();
