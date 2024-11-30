@@ -20,7 +20,10 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 void WaterSampleWindow::createMainWidget()
 {
   table = new QTableView();
-  table->setModel(&model);
+  proxyModel = new QSortFilterProxyModel(this);
+  proxyModel->setSourceModel(&model);
+  proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+  table->setModel(proxyModel);
 
   QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
   table->setFont(tableFont);
@@ -38,7 +41,17 @@ void WaterSampleWindow::createButtons()
 void WaterSampleWindow::createToolBar()
 {
   QToolBar* toolBar = new QToolBar();
+
+  loadButton = new QPushButton("Load");
+  connect(loadButton, SIGNAL(clicked()), this, SLOT(openCSV()));
+
+  filterInput = new QLineEdit();
+  filterInput->setPlaceholderText("Filter...");
+  connect(filterInput, &QLineEdit::textChanged, this, &WaterSampleWindow::applyFilter);
+
   toolBar->addWidget(loadButton);
+  toolBar->addWidget(filterInput);
+
   addToolBar(Qt::LeftToolBarArea, toolBar);
 }
 
@@ -77,6 +90,12 @@ void WaterSampleWindow::displayStats()
   }
 }
 
+void WaterSampleWindow::applyFilter()
+{
+  QString filterText = filterInput->text();
+  proxyModel->setFilterKeyColumn(-1);
+  proxyModel->setFilterFixedString(filterText);
+}
 
 void WaterSampleWindow::about()
 {

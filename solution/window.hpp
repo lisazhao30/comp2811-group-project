@@ -3,6 +3,8 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QSortFilterProxyModel>
+#include <QLineEdit>
 #include "model.hpp"
 
 class QString;
@@ -20,6 +22,13 @@ class WaterSampleWindow: public QMainWindow
     WaterSampleWindow();
 
   private:
+    WaterSampleModel model;
+    QTableView* table;
+    QPushButton* loadButton;
+
+    QSortFilterProxyModel* proxyModel;
+    QLineEdit* filterInput;
+
     void createMainWidget();
     void createToolBar();
     void createButtons();
@@ -31,5 +40,6 @@ class WaterSampleWindow: public QMainWindow
   private slots:
     void openCSV();
     void displayStats();
+    void applyFilter();
     void about();
 };
