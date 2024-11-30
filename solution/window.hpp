@@ -22,9 +22,9 @@ class WaterSampleWindow: public QMainWindow
     WaterSampleWindow();
 
   private:
-    WaterSampleModel model;
-    QTableView* table;
-    QPushButton* loadButton;
+    WaterSampleModel model;          // data model used by table
+    QTableView* table;         // table of water sample data
+    QPushButton* loadButton;   // button to load a new CSV file
 
     QSortFilterProxyModel* proxyModel;
     QLineEdit* filterInput;
@@ -33,9 +33,6 @@ class WaterSampleWindow: public QMainWindow
     void createToolBar();
     void createButtons();
 
-    WaterSampleModel model;          // data model used by table
-    QTableView* table;         // table of water sample data
-    QPushButton* loadButton;   // button to load a new CSV file
 
   private slots:
     void openCSV();
