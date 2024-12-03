@@ -35,18 +35,19 @@ WaterSample::WaterSample(
   std::tm tm = {};
   istringstream ss(sample_date_time);
   ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%S");
-  this->sample_date_time = std::mktime(&tm);
 
   if (ss.fail()) {
     throw invalid_argument("Invalid date time format");
   }
+
+  this->sample_date_time = QDateTime::fromString(QString::fromStdString(sample_date_time), "yyyy-MM-ddTHH:mm:ss");
 }
 
 ostream& operator<<(ostream& out, const WaterSample& water_sample)
 {
   return out << "WaterSample(" << water_sample.get_id() << ", " << water_sample.get_sampling_point() << ", "
     << water_sample.get_sampling_point_notation() << ", " << water_sample.get_sampling_point_label() << ", "
-    << water_sample.get_sample_date_time() << ", " << water_sample.get_determinand_label() << ", "
+    << water_sample.get_sample_date_time_string() << ", " << water_sample.get_determinand_label() << ", "
     << water_sample.get_determinand_definition() << ", " << water_sample.get_determinand_notation() << ", "
     << water_sample.get_result_qualifier_notation() << ", " << water_sample.get_result() << ", "
     << water_sample.get_determinand_unit_label() << ", " << water_sample.get_sampled_material_type_label() << ", "

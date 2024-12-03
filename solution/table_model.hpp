@@ -1,13 +1,13 @@
-
 #pragma once
 
 #include <QAbstractTableModel>
+#include <QIdentityProxyModel>
 #include "dataset.hpp"
 
-class WaterSampleModel: public QAbstractTableModel
+class WaterSampleTableModel: public QAbstractTableModel
 {
   public:
-    WaterSampleModel(QObject* parent = nullptr): QAbstractTableModel(parent) {}
+    WaterSampleTableModel(QObject* parent = nullptr): QAbstractTableModel(parent) {}
     void updateFromFile(const QString&);
     bool hasData() const { return dataset.size() > 0; }
 
@@ -18,4 +18,11 @@ class WaterSampleModel: public QAbstractTableModel
 
   private:
     WaterDataset dataset;
+};
+
+class WaterSampleTableMonthDayProxy: public QIdentityProxyModel
+{
+  public:
+    WaterSampleTableMonthDayProxy(QObject* parent = nullptr): QIdentityProxyModel(parent) {}
+    QVariant data(const QModelIndex&, int) const override;
 };

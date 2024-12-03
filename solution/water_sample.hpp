@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <chrono>
+#include <QDateTime>
 
 enum ResultQualifierNotation {
   Empty,
@@ -36,9 +37,9 @@ class WaterSample
     std::string get_sampling_point() const { return sampling_point; }
     std::string get_sampling_point_notation() const { return sampling_point_notation; }
     std::string get_sampling_point_label() const { return sampling_point_label; }
-    std::time_t get_sample_date_time() const { return sample_date_time; }
+    QDateTime get_sample_date_time() const { return sample_date_time; }
     std::string get_sample_date_time_string() const {
-      return std::asctime(std::localtime(&sample_date_time));
+      return sample_date_time.toString().toStdString();
     }
     std::string get_determinand_label() const { return determinand_label; }
     std::string get_determinand_definition() const { return determinand_definition; }
@@ -57,7 +58,7 @@ class WaterSample
     std::string sampling_point;
     std::string sampling_point_notation;
     std::string sampling_point_label;
-    std::time_t sample_date_time;
+    QDateTime sample_date_time;
     std::string determinand_label;
     std::string determinand_definition;
     int16_t determinand_notation; // Largest number in dataset is 9993, store with 16 bits

@@ -1,9 +1,11 @@
 #include <QtWidgets>
+#include <QChart>
 #include <stdexcept>
 #include <iostream>
 #include "window.hpp"
+#include "line_chart.hpp"
 
-static const int MIN_WIDTH = 620;
+#define MIN_WINDOW_WIDTH 620
 
 
 WaterSampleWindow::WaterSampleWindow(): QMainWindow()
@@ -12,7 +14,7 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
   createButtons();
   createToolBar();
 
-  setMinimumWidth(MIN_WIDTH);
+  setMinimumWidth(MIN_WINDOW_WIDTH);
   setWindowTitle("Water Sample Tool");
 }
 
@@ -20,15 +22,28 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 void WaterSampleWindow::createMainWidget()
 {
   table = new QTableView();
+
   proxyModel = new QSortFilterProxyModel(this);
   proxyModel->setSourceModel(&model);
   proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-  table->setModel(proxyModel);
+
+  WaterSampleTableMonthDayProxy* monthDayProxyModel = new WaterSampleTableMonthDayProxy(this);
+  monthDayProxyModel->setSourceModel(proxyModel);
+
+  table->setModel(monthDayProxyModel);
 
   QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
   table->setFont(tableFont);
 
-  setCentralWidget(table);
+  auto chart = new QChart;
+  chart->setAnimationOptions(QChart::AllAnimations);
+  auto series = new PollutantTrendLineSeries("Nitrate-N", model);
+  chart->addSeries(series);
+  chart->createDefaultAxes();
+  chartView = new QChartView(chart, this);
+  setCentralWidget(chartView);
+
+  //setCentralWidget(table);
 }
 
 void WaterSampleWindow::createButtons()
@@ -78,6 +93,7 @@ void WaterSampleWindow::openCSV()
   }
 
   table->resizeColumnsToContents();
+  chartView->repaint();
 
   // TODO: call function to update stats
 }
@@ -93,6 +109,7 @@ void WaterSampleWindow::displayStats()
 void WaterSampleWindow::applyFilter()
 {
   QString filterText = filterInput->text();
+
   proxyModel->setFilterKeyColumn(-1);
   proxyModel->setFilterFixedString(filterText);
 }

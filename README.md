@@ -21,6 +21,7 @@ This application is designed to monitor and analyse water quality data, with a f
       mkdir build && cd build
       cmake ..
       ```
+    - If Qt6Charts isn't found, install on linux with `sudo apt install libqt6charts6-dev`
     - Compile the project:
       ```bash
       make

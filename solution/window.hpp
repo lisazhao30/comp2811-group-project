@@ -5,7 +5,8 @@
 #include <QMainWindow>
 #include <QSortFilterProxyModel>
 #include <QLineEdit>
-#include "model.hpp"
+#include <QChartView>
+#include "table_model.hpp"
 
 class QString;
 class QComboBox;
@@ -22,9 +23,10 @@ class WaterSampleWindow: public QMainWindow
     WaterSampleWindow();
 
   private:
-    WaterSampleModel model;          // data model used by table
-    QTableView* table;         // table of water sample data
-    QPushButton* loadButton;   // button to load a new CSV file
+    WaterSampleTableModel model;
+    QChartView* chartView;
+    QTableView* table;
+    QPushButton* loadButton;
 
     QSortFilterProxyModel* proxyModel;
     QLineEdit* filterInput;

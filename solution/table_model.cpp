@@ -1,6 +1,7 @@
-#include "model.hpp"
+#include "table_model.hpp"
+#include <QModelIndex>
 
-void WaterSampleModel::updateFromFile(const QString& filename)
+void WaterSampleTableModel::updateFromFile(const QString& filename)
 {
   beginResetModel();
   dataset.loadData(filename.toStdString());
@@ -8,7 +9,7 @@ void WaterSampleModel::updateFromFile(const QString& filename)
 }
 
 
-QVariant WaterSampleModel::data(const QModelIndex& index, int role) const
+QVariant WaterSampleTableModel::data(const QModelIndex& index, int role) const
 {
   if (!index.isValid()) {
     return QVariant();
@@ -17,15 +18,16 @@ QVariant WaterSampleModel::data(const QModelIndex& index, int role) const
   if (role == Qt::TextAlignmentRole) {
     return int(Qt::AlignRight | Qt::AlignVCenter);
   }
+
   else if (role == Qt::DisplayRole) {
     WaterSample ws = dataset[index.row()];
-    // TODO: do we want all columns to be displayed?
+
     switch (index.column()) {
       case 0: return QVariant(ws.get_id().c_str());
       case 1: return QVariant(ws.get_sampling_point().c_str());
       case 2: return QVariant(ws.get_sampling_point_notation().c_str());
       case 3: return QVariant(ws.get_sampling_point_label().c_str());
-      case 4: return QVariant(ws.get_sample_date_time_string().c_str()); // TODO: add method to get string representation of string
+      case 4: return QVariant(ws.get_sample_date_time());
       case 5: return QVariant(ws.get_determinand_label().c_str());
       case 6: return QVariant(ws.get_determinand_definition().c_str());
       case 7: return QVariant(ws.get_determinand_notation());
@@ -44,7 +46,7 @@ QVariant WaterSampleModel::data(const QModelIndex& index, int role) const
 }
 
 
-QVariant WaterSampleModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant WaterSampleTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role != Qt::DisplayRole) {
     return QVariant();
@@ -73,4 +75,16 @@ QVariant WaterSampleModel::headerData(int section, Qt::Orientation orientation, 
     case 15: return QString("Sampling Point Northing");
     default: return QVariant();
   }
+}
+
+QVariant WaterSampleTableMonthDayProxy::data(const QModelIndex& index, int role) const
+{
+  QModelIndex sourceIndex = mapToSource(index);
+  QVariant value = sourceModel()->data(sourceIndex, role);
+
+  if (index.column() == 4) {
+    return QVariant(value.toDate().day());
+  }
+
+  return value;
 }
