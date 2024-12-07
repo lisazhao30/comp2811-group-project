@@ -13,7 +13,7 @@ qt_add_executable(watersampletool
     water_sample.cpp
     dataset.cpp
     table_model.cpp
-    line_chart.cpp
+    pollutant_line_chart.cpp
     window.cpp
 )
 

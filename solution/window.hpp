@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QChartView>
 #include "table_model.hpp"
+#include "pollutant_line_chart.hpp"
 
 class QString;
 class QComboBox;
@@ -24,12 +25,9 @@ class WaterSampleWindow: public QMainWindow
 
   private:
     WaterSampleTableModel model;
+    PollutantTrendLineChart* chart;
     QChartView* chartView;
-    QTableView* table;
     QPushButton* loadButton;
-
-    QSortFilterProxyModel* proxyModel;
-    QLineEdit* filterInput;
 
     void createMainWidget();
     void createToolBar();
@@ -39,6 +37,5 @@ class WaterSampleWindow: public QMainWindow
   private slots:
     void openCSV();
     void displayStats();
-    void applyFilter();
     void about();
 };

@@ -20,9 +20,9 @@ class WaterSampleTableModel: public QAbstractTableModel
     WaterDataset dataset;
 };
 
-class WaterSampleTableMonthDayProxy: public QIdentityProxyModel
+class WaterSampleTableTimeSinceEpochProxy: public QIdentityProxyModel
 {
   public:
-    WaterSampleTableMonthDayProxy(QObject* parent = nullptr): QIdentityProxyModel(parent) {}
+    WaterSampleTableTimeSinceEpochProxy(QObject* parent = nullptr): QIdentityProxyModel(parent) {}
     QVariant data(const QModelIndex&, int) const override;
 };

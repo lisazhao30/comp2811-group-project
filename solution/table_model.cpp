@@ -77,13 +77,13 @@ QVariant WaterSampleTableModel::headerData(int section, Qt::Orientation orientat
   }
 }
 
-QVariant WaterSampleTableMonthDayProxy::data(const QModelIndex& index, int role) const
+QVariant WaterSampleTableTimeSinceEpochProxy::data(const QModelIndex& index, int role) const
 {
   QModelIndex sourceIndex = mapToSource(index);
   QVariant value = sourceModel()->data(sourceIndex, role);
 
   if (index.column() == 4) {
-    return QVariant(value.toDate().day());
+    return QVariant(value.toDateTime().toMSecsSinceEpoch());
   }
 
   return value;
