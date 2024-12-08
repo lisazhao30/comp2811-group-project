@@ -7,7 +7,7 @@
 #include <iostream>
 #include "window.hpp"
 
-#define MIN_WINDOW_WIDTH 620
+#define MIN_WINDOW_WIDTH 1200
 
 WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 {
@@ -16,7 +16,12 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
   createNavBar();
   createPageArea();
   createHomePage();
-  createSecondTestPage();
+  createPollutantOverviewPage();
+  createPersistentOrganicPollutantsPage();
+  createEnvironmentalLitterIndicatorsPage();
+  createFluorinatedCompoundsPage();
+  createComplianceDashboardPage();
+  createDataPage();
 
   setMinimumWidth(MIN_WINDOW_WIDTH);
   setWindowTitle("Water Sample Tool");
@@ -52,6 +57,14 @@ void WaterSampleWindow::createMenuBar()
 void WaterSampleWindow::createMainLayout()
 {
   mainWindowContainer = new QWidget(this);
+
+  // set background colour
+  QPalette pal = QPalette();
+  pal.setColor(QPalette::Window, QColor("#FAF5EB"));
+  mainWindowContainer->setAutoFillBackground(true); 
+  mainWindowContainer->setPalette(pal);
+
+  // create layout box
   mainWindowLayout = new QVBoxLayout();
   mainWindowContainer->setLayout(mainWindowLayout);
   setCentralWidget(mainWindowContainer);
@@ -80,22 +93,121 @@ void WaterSampleWindow::addPage(QWidget* page, const QString& label)
   pagesStackedWidget->addWidget(page);
 }
 
+// pages for the application
 void WaterSampleWindow::createHomePage()
 {
+  // create page layout
+  QWidget* page = new QWidget();
+  QVBoxLayout* layout = new QVBoxLayout(page);
+
+  // add text
+  TextComponents* textComponents = new TextComponents();
+  textComponents->addHeaderText("Spot the Trends, Shape the Future:\nWater Quality Insights at Your Fingertips");
+  layout->addWidget(textComponents);
+
+  // add chart
   chart = new PollutantTrendLineChart("Nitrate-N", &model);
   chartView = new QChartView(chart);
   chartView->setRenderHint(QPainter::Antialiasing);
-  addPage(chartView, "Home");
+  layout->addWidget(chartView);
+
+  addPage(page, "Home");
 }
 
-void WaterSampleWindow::createSecondTestPage()
+void WaterSampleWindow::createPollutantOverviewPage()
 {
   QWidget* page = new QWidget();
   QVBoxLayout* layout = new QVBoxLayout(page);
-  QLabel* label = new QLabel("Second Test Page");
-  layout->addWidget(label);
-  addPage(page, "Second Test Page");
+  
+  // add text
+  TextComponents* textComponents = new TextComponents();
+  textComponents->addHeader2Text("Pollutant Insights: Trends, Compliance, and Safety at a Glance");
+  layout->addWidget(textComponents);
+
+  addPage(page, "Pollutant Overview Page");
 }
+
+void WaterSampleWindow::createPersistentOrganicPollutantsPage()
+{
+  QWidget* page = new QWidget();
+  QVBoxLayout* layout = new QVBoxLayout(page);
+
+  // add text
+  TextComponents* textComponents = new TextComponents();
+  textComponents->addHeader2Text("Persistent Organic Pollutants:\nTracking Trends, Risks, and Compliance");
+  layout->addWidget(textComponents);
+
+  addPage(page, "Persistent Organic Pollutants Page");
+}
+
+void WaterSampleWindow::createEnvironmentalLitterIndicatorsPage()
+{
+  QWidget* page = new QWidget();
+  QVBoxLayout* layout = new QVBoxLayout(page);
+  
+  // add text
+  TextComponents* textComponents = new TextComponents();
+  textComponents->addHeader2Text("Environmental Litter Indicators: Tracking Pollution in Waterways");
+  layout->addWidget(textComponents);
+
+  addPage(page, "Environmental Litter Indicators Page");
+}
+
+void WaterSampleWindow::createFluorinatedCompoundsPage()
+{
+  QWidget* page = new QWidget();
+  QVBoxLayout* layout = new QVBoxLayout(page);
+  
+  // add text
+  TextComponents* textComponents = new TextComponents();
+  textComponents->addHeader2Text("Fluorinated Compounds:\nMonitoring PFAS Levels and Environmental Impact");
+  layout->addWidget(textComponents);
+
+  addPage(page, "Fluorinated Compounds Page");
+}
+
+void WaterSampleWindow::createComplianceDashboardPage()
+{
+  QWidget* page = new QWidget();
+  QVBoxLayout* layout = new QVBoxLayout(page);
+
+  // add text
+  TextComponents* textComponents = new TextComponents();
+  textComponents->addHeader2Text("Compliance Dashboard:\nTracking Safety Standards Across Pollutants");
+  layout->addWidget(textComponents);
+
+  addPage(page, "Compliance Dashboard Page");
+}
+
+void WaterSampleWindow::createDataPage()
+{
+  QWidget* page = new QWidget();
+  QVBoxLayout* layout = new QVBoxLayout(page);
+  
+  // add text
+  TextComponents* textComponents = new TextComponents();
+  textComponents->addHeader2Text("Data Page");
+  layout->addWidget(textComponents);
+
+  // add table
+  table = new QTableView();
+
+  proxyModel = new QSortFilterProxyModel(this);
+  proxyModel->setSourceModel(&model);
+  proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+  WaterSampleTableTimeSinceEpochProxy* monthDayProxyModel = new WaterSampleTableTimeSinceEpochProxy(this);
+  monthDayProxyModel->setSourceModel(proxyModel);
+
+  table->setModel(monthDayProxyModel);
+
+  QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+  table->setFont(tableFont);
+  layout->addWidget(table);
+
+  addPage(page, "Data Page");
+}
+
 
 void WaterSampleWindow::openCSV()
 {

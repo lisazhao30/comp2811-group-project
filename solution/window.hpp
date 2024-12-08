@@ -7,10 +7,12 @@
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QStackedWidget>
+#include <QPalette>
 
 #include "table_model.hpp"
 #include "pollutant_line_chart.hpp"
 #include "navbar.hpp"
+#include "text_components.hpp"
 
 class QString;
 class QComboBox;
@@ -33,11 +35,14 @@ class WaterSampleWindow: public QMainWindow
     QTabWidget* tabSwitcher;
     QScrollArea* scrollArea;
     QStackedWidget* pagesStackedWidget;
+    TextComponents* textComponents;
+    QTableView* table;
 
     WaterSampleTableModel model;
 
     PollutantTrendLineChart* chart;
     QChartView* chartView;
+    QSortFilterProxyModel* proxyModel;
 
     void createMenuBar();
     void createMainLayout();
@@ -45,7 +50,12 @@ class WaterSampleWindow: public QMainWindow
     void createPageArea();
     void addPage(QWidget* page, const QString& label);
     void createHomePage();
-    void createSecondTestPage();
+    void createDataPage();
+    void createPollutantOverviewPage();
+    void createPersistentOrganicPollutantsPage();
+    void createEnvironmentalLitterIndicatorsPage();
+    void createFluorinatedCompoundsPage();
+    void createComplianceDashboardPage();
 
 
   private slots:

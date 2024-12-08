@@ -9,6 +9,10 @@ NavBar::NavBar(QWidget* parent): QWidget(parent)
 
     tabBar = new QTabBar(this);
     tabBar->setDrawBase(false);
+
+    // set tab text colour to black
+    tabBar->setStyleSheet("color: black;");
+
     navBarLayout->addWidget(tabBar);
 }
 
