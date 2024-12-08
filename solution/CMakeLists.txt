@@ -15,6 +15,7 @@ qt_add_executable(watersampletool
     table_model.cpp
     pollutant_line_chart.cpp
     window.cpp
+    navbar.cpp
 )
 
 target_link_libraries(watersampletool PRIVATE Qt6::Widgets Qt6::Charts)
