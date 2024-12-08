@@ -14,8 +14,7 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
   createMenuBar();
   createMainLayout();
   createNavBar();
-  createScrollArea();
-  createPageLayout();
+  createPageArea();
   createHomePage();
   createSecondTestPage();
 
@@ -53,26 +52,14 @@ void WaterSampleWindow::createNavBar()
 }
 
 // Create a scroll area for the main page content, and a container widget
-void WaterSampleWindow::createScrollArea()
+void WaterSampleWindow::createPageArea()
 {
   scrollArea = new QScrollArea();
   scrollArea->setWidgetResizable(true);
   mainWindowLayout->addWidget(scrollArea);
 
-  scrollAreaContainer = new QWidget(scrollArea);
-  scrollAreaContainer->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-  scrollArea->setWidget(scrollAreaContainer);
-}
-
-// Create a layout for inside the scroll area container,
-// and a stacked widget to hold the pages
-void WaterSampleWindow::createPageLayout()
-{
-  pageLayout = new QVBoxLayout(scrollAreaContainer);
-  scrollAreaContainer->setLayout(pageLayout);
-  
   pagesStackedWidget = new QStackedWidget();
-  pageLayout->addWidget(pagesStackedWidget);
+  scrollArea->setWidget(pagesStackedWidget);
 }
 
 void WaterSampleWindow::addPage(QWidget* page, const QString& label)

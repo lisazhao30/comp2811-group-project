@@ -32,8 +32,6 @@ class WaterSampleWindow: public QMainWindow
     NavBar* navBar;
     QTabWidget* tabSwitcher;
     QScrollArea* scrollArea;
-    QWidget* scrollAreaContainer;
-    QVBoxLayout* pageLayout;
     QStackedWidget* pagesStackedWidget;
 
     WaterSampleTableModel model;
@@ -44,8 +42,7 @@ class WaterSampleWindow: public QMainWindow
     void createMenuBar();
     void createMainLayout();
     void createNavBar();
-    void createScrollArea();
-    void createPageLayout();
+    void createPageArea();
     void addPage(QWidget* page, const QString& label);
     void createHomePage();
     void createSecondTestPage();
