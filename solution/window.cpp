@@ -24,16 +24,28 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 
 void WaterSampleWindow::createMenuBar()
 {
-  QAction* openAct = menuBar()->addAction("Open CSV", this, SLOT(openCSV()));
+  // create mac friendly menubar
+  QMenuBar *menuBar = new QMenuBar(nullptr);
+  QMenu *fileMenu = menuBar->addMenu("File");
+
+  QAction *openAct = new QAction("Open CSV", this);
   openAct->setShortcuts(QKeySequence::Open);
   openAct->setStatusTip(tr("Open a CSV dataset"));
+  connect(openAct, &QAction::triggered, this, &WaterSampleWindow::openCSV);
 
-  QAction* aboutAct = menuBar()->addAction("About", this, SLOT(about()));
+  QAction* aboutAct = new QAction("About", this);
   aboutAct->setShortcuts(QKeySequence::HelpContents);
   aboutAct->setStatusTip(tr("About this app"));
+  connect(aboutAct, &QAction::triggered, this, &WaterSampleWindow::about);
 
-  QAction* exitAct = menuBar()->addAction("Exit", this, SLOT(close()));
+  QAction *exitAct = new QAction("Exit", this);
   exitAct->setShortcuts(QKeySequence::Close);
+  connect(exitAct, &QAction::triggered, this, &WaterSampleWindow::close);
+  fileMenu->addAction(openAct);
+  fileMenu->addAction(aboutAct);
+  fileMenu->addAction(exitAct);
+
+  this->setMenuBar(menuBar);
 }
 
 // Create the central widget, and layout for nav bar and scroll area
