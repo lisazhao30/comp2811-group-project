@@ -87,124 +87,53 @@ void WaterSampleWindow::createPageArea()
   scrollArea->setWidget(pagesStackedWidget);
 }
 
-void WaterSampleWindow::addPage(QWidget* page, const QString& label)
+void WaterSampleWindow::addPage(Page* page, const QString& label)
 {
   navBar->addTab(pagesStackedWidget, label);
   pagesStackedWidget->addWidget(page);
+  connect(this, &WaterSampleWindow::newCSVLoaded, page, &Page::modelUpdated);
 }
 
 // pages for the application
 void WaterSampleWindow::createHomePage()
 {
-  // create page layout
-  QWidget* page = new QWidget();
-  QVBoxLayout* layout = new QVBoxLayout(page);
-
-  // add text
-  TextComponents* textComponents = new TextComponents();
-  textComponents->addHeaderText("Spot the Trends, Shape the Future:\nWater Quality Insights at Your Fingertips");
-  layout->addWidget(textComponents);
-
-  // add chart
-  chart = new PollutantTrendLineChart("Nitrate-N", &model);
-  chartView = new QChartView(chart);
-  chartView->setRenderHint(QPainter::Antialiasing);
-  layout->addWidget(chartView);
-
+  HomePage* page = new HomePage(&model);
   addPage(page, "Home");
 }
 
 void WaterSampleWindow::createPollutantOverviewPage()
 {
-  QWidget* page = new QWidget();
-  QVBoxLayout* layout = new QVBoxLayout(page);
-  
-  // add text
-  TextComponents* textComponents = new TextComponents();
-  textComponents->addHeader2Text("Pollutant Insights: Trends, Compliance, and Safety at a Glance");
-  layout->addWidget(textComponents);
-
+  PollutantOverviewPage* page = new PollutantOverviewPage(&model);
   addPage(page, "Pollutant Overview Page");
 }
 
 void WaterSampleWindow::createPersistentOrganicPollutantsPage()
 {
-  QWidget* page = new QWidget();
-  QVBoxLayout* layout = new QVBoxLayout(page);
-
-  // add text
-  TextComponents* textComponents = new TextComponents();
-  textComponents->addHeader2Text("Persistent Organic Pollutants:\nTracking Trends, Risks, and Compliance");
-  layout->addWidget(textComponents);
-
+  PersistentOrganicPollutantsPage* page = new PersistentOrganicPollutantsPage(&model);
   addPage(page, "Persistent Organic Pollutants Page");
 }
 
 void WaterSampleWindow::createEnvironmentalLitterIndicatorsPage()
 {
-  QWidget* page = new QWidget();
-  QVBoxLayout* layout = new QVBoxLayout(page);
-  
-  // add text
-  TextComponents* textComponents = new TextComponents();
-  textComponents->addHeader2Text("Environmental Litter Indicators: Tracking Pollution in Waterways");
-  layout->addWidget(textComponents);
-
+  EnvironmentalLitterIndicatorsPage* page = new EnvironmentalLitterIndicatorsPage(&model);
   addPage(page, "Environmental Litter Indicators Page");
 }
 
 void WaterSampleWindow::createFluorinatedCompoundsPage()
 {
-  QWidget* page = new QWidget();
-  QVBoxLayout* layout = new QVBoxLayout(page);
-  
-  // add text
-  TextComponents* textComponents = new TextComponents();
-  textComponents->addHeader2Text("Fluorinated Compounds:\nMonitoring PFAS Levels and Environmental Impact");
-  layout->addWidget(textComponents);
-
+  FluorinatedCompoundsPage* page = new FluorinatedCompoundsPage(&model);
   addPage(page, "Fluorinated Compounds Page");
 }
 
 void WaterSampleWindow::createComplianceDashboardPage()
 {
-  QWidget* page = new QWidget();
-  QVBoxLayout* layout = new QVBoxLayout(page);
-
-  // add text
-  TextComponents* textComponents = new TextComponents();
-  textComponents->addHeader2Text("Compliance Dashboard:\nTracking Safety Standards Across Pollutants");
-  layout->addWidget(textComponents);
-
+  ComplianceDashboardPage* page = new ComplianceDashboardPage(&model);
   addPage(page, "Compliance Dashboard Page");
 }
 
 void WaterSampleWindow::createDataPage()
 {
-  QWidget* page = new QWidget();
-  QVBoxLayout* layout = new QVBoxLayout(page);
-  
-  // add text
-  TextComponents* textComponents = new TextComponents();
-  textComponents->addHeader2Text("Data Page");
-  layout->addWidget(textComponents);
-
-  // add table
-  table = new QTableView();
-
-  proxyModel = new QSortFilterProxyModel(this);
-  proxyModel->setSourceModel(&model);
-  proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-  WaterSampleTableTimeSinceEpochProxy* monthDayProxyModel = new WaterSampleTableTimeSinceEpochProxy(this);
-  monthDayProxyModel->setSourceModel(proxyModel);
-
-  table->setModel(monthDayProxyModel);
-
-  QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-  table->setFont(tableFont);
-  layout->addWidget(table);
-
+  DataPage* page = new DataPage(&model);
   addPage(page, "Data Page");
 }
 
@@ -230,12 +159,7 @@ void WaterSampleWindow::openCSV()
     return;
   }
 
-  auto series = chart->series().at(0);
-  // Refreshes the chart, probably shouldn't need this, bug?
-  chart->removeSeries(series);
-  chart->addSeries(series);
-  
-  chart->setAxes();
+  newCSVLoaded();
 }
 
 

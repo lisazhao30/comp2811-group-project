@@ -16,7 +16,14 @@ qt_add_executable(watersampletool
     pollutant_line_chart.cpp
     window.cpp
     navbar.cpp
-    text_components.cpp
+    pages/page.cpp
+    pages/compliance_dashboard.cpp
+    pages/data_page.cpp
+    pages/environmental_litter_indicators.cpp
+    pages/fluorinated_compounds.cpp
+    pages/home.cpp
+    pages/persistent_organic_pollutants.cpp
+    pages/pollutant_overview.cpp
 )
 
 target_link_libraries(watersampletool PRIVATE Qt6::Widgets Qt6::Charts)

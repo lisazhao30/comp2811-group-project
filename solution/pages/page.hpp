@@ -3,19 +3,25 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QFont>
 
-class TextComponents: public QWidget
+#include "../table_model.hpp"
+
+class Page: public QWidget
 {
+    Q_OBJECT
+
     public:
-        TextComponents(QWidget* parent = nullptr);
+        Page(WaterSampleTableModel* model, QWidget* parent = nullptr);
 
         void addHeaderText(const QString& text);
         void addHeader2Text(const QString& text);
-        void addSubtitleText(const QString& text);
         void addParagraphText(const QString& text);
-        
-    private:
-        QVBoxLayout* textLayout;
+        void addWidget(QWidget* widget);
+
+    protected:
+        QVBoxLayout* pageLayout;
         QLabel* createLabel(const QString& text, const QFont& font, const QString& styleSheet);
+
+    public slots:
+        void modelUpdated();
 };
