@@ -10,14 +10,9 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     // add chart
     chart = new PollutantTrendLineChart("Nitrate-N", model);
-    QChartView* chartView = new QChartView(this);
+    chartView = new QChartView(chart);
     chartView->setRenderHint(QPainter::Antialiasing);
     addWidget(chartView);
-
-    // Create a label for the page
-    QLabel* label = new QLabel("Home Page", this);
-    label->setAlignment(Qt::AlignCenter);
-    addWidget(label);
 }
 
 void HomePage::modelUpdated() {

@@ -91,7 +91,7 @@ void WaterSampleWindow::addPage(Page* page, const QString& label)
 {
   navBar->addTab(pagesStackedWidget, label);
   pagesStackedWidget->addWidget(page);
-  connect(this, &WaterSampleWindow::newCSVLoaded, page, &Page::modelUpdated);
+  connect(this, SIGNAL(newCSVLoaded()), page, SLOT(modelUpdated()));
 }
 
 // pages for the application
