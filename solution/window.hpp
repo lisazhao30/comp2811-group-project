@@ -54,9 +54,9 @@ class WaterSampleWindow: public QMainWindow
     void createPages();
 
   signals:
-    void newCSVLoaded();
+    void newDbLoaded();
 
   private slots:
-    void openCSV();
+    void openDb();
     void about();
 };

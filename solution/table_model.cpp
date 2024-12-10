@@ -4,7 +4,7 @@
 void WaterSampleTableModel::updateFromFile(const QString& filename)
 {
   beginResetModel();
-  dataset.loadData(filename.toStdString());
+  dataset.loadData(filename);
   endResetModel();
 }
 
@@ -23,20 +23,20 @@ QVariant WaterSampleTableModel::data(const QModelIndex& index, int role) const
     WaterSample ws = dataset[index.row()];
 
     switch (index.column()) {
-      case 0: return QVariant(ws.get_id().c_str());
-      case 1: return QVariant(ws.get_sampling_point().c_str());
-      case 2: return QVariant(ws.get_sampling_point_notation().c_str());
-      case 3: return QVariant(ws.get_sampling_point_label().c_str());
+      case 0: return QVariant(ws.get_id());
+      case 1: return QVariant(ws.get_sampling_point());
+      case 2: return QVariant(ws.get_sampling_point_notation());
+      case 3: return QVariant(ws.get_sampling_point_label());
       case 4: return QVariant(ws.get_sample_date_time());
-      case 5: return QVariant(ws.get_determinand_label().c_str());
-      case 6: return QVariant(ws.get_determinand_definition().c_str());
+      case 5: return QVariant(ws.get_determinand_label());
+      case 6: return QVariant(ws.get_determinand_definition());
       case 7: return QVariant(ws.get_determinand_notation());
       case 8: return QVariant(ws.get_result_qualifier_notation());
       case 9: return QVariant(ws.get_result());
-      case 10: return QVariant(ws.get_determinand_unit_label().c_str());
-      case 11: return QVariant(ws.get_sampled_material_type_label().c_str());
+      case 10: return QVariant(ws.get_determinand_unit_label());
+      case 11: return QVariant(ws.get_sampled_material_type_label());
       case 12: return QVariant(ws.get_is_compliance_sample());
-      case 13: return QVariant(ws.get_sample_purpose_label().c_str());
+      case 13: return QVariant(ws.get_sample_purpose_label());
       case 14: return QVariant(ws.get_sampling_point_easting());
       case 15: return QVariant(ws.get_sampling_point_northing());
     }

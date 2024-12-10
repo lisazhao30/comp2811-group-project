@@ -5,7 +5,7 @@ project(cwk2 VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets Charts)
+find_package(Qt6 REQUIRED COMPONENTS Widgets Charts Sql)
 qt_standard_project_setup()
 
 qt_add_executable(watersampletool
@@ -26,7 +26,7 @@ qt_add_executable(watersampletool
     pages/pollutant_overview.cpp
 )
 
-target_link_libraries(watersampletool PRIVATE Qt6::Widgets Qt6::Charts)
+target_link_libraries(watersampletool PRIVATE Qt6::Widgets Qt6::Charts Qt6::Sql)
 
 set_target_properties(watersampletool PROPERTIES
     WIN32_EXECUTABLE ON

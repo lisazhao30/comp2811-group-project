@@ -11,25 +11,27 @@
 
 WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 {
+  model.updateFromFile(QCoreApplication::applicationDirPath() + "/../data/data_small.db");
+
   createMenuBar();
   createMainLayout();
   createNavBar();
   createPageArea();
   createPages();
   setMinimumWidth(MIN_WINDOW_WIDTH);
-  setWindowTitle("Water Sample Tool");
+  setWindowTitle("Water Quality Monitor");
 }
 
 void WaterSampleWindow::createMenuBar()
 {
   // create mac friendly menubar
-  QMenuBar *menuBar = new QMenuBar(nullptr);
+  QMenuBar *menuBar = new QMenuBar();
   QMenu *fileMenu = menuBar->addMenu("File");
 
   QAction *openAct = new QAction("Open CSV", this);
   openAct->setShortcuts(QKeySequence::Open);
   openAct->setStatusTip(tr("Open a CSV dataset"));
-  connect(openAct, &QAction::triggered, this, &WaterSampleWindow::openCSV);
+  connect(openAct, &QAction::triggered, this, &WaterSampleWindow::openDb);
 
   QAction* aboutAct = new QAction("About", this);
   aboutAct->setShortcuts(QKeySequence::HelpContents);
@@ -84,7 +86,7 @@ void WaterSampleWindow::addPage(Page* page, const QString& label)
 {
   navBar->addTab(pagesStackedWidget, label);
   pagesStackedWidget->addWidget(page);
-  connect(this, SIGNAL(newCSVLoaded()), page, SLOT(modelUpdated()));
+  connect(this, SIGNAL(newDbLoaded()), page, SLOT(modelUpdated()));
 }
 
 void WaterSampleWindow::createPages()
@@ -98,11 +100,11 @@ void WaterSampleWindow::createPages()
   addPage(new DataPage(&model), "Data Page");
 }
 
-void WaterSampleWindow::openCSV()
+void WaterSampleWindow::openDb()
 {
   QString filename = QFileDialog::getOpenFileName(
     this, "Data Location", ".",
-    "CSV files (*.csv)");
+    "DB files (*.db)");
 
   if (filename.length() == 0) {
     QMessageBox::critical(this, "Data Location Error",
@@ -115,16 +117,15 @@ void WaterSampleWindow::openCSV()
     model.updateFromFile(filename);
   }
   catch (const std::exception& error) {
-    QMessageBox::critical(this, "CSV File Error", error.what());
+    QMessageBox::critical(this, "DB File Error", error.what());
     return;
   }
 
-  newCSVLoaded();
+  newDbLoaded();
 }
 
 void WaterSampleWindow::about()
 {
-  QMessageBox::about(this, "About Water Sample Tool",
-    "Water Sample Tool displays and analyzes water sample data loaded from "
-    "a CSV file");
+  QMessageBox::about(this, "About Water Quality Monitor",
+    "Water Sample Tool displays and analyzes water sample data");
 }
