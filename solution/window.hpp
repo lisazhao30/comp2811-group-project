@@ -45,20 +45,13 @@ class WaterSampleWindow: public QMainWindow
     QStackedWidget* pagesStackedWidget;
 
     WaterSampleTableModel model;
-    QSortFilterProxyModel* proxyModel;
 
     void createMenuBar();
     void createMainLayout();
     void createNavBar();
     void createPageArea();
     void addPage(Page* page, const QString& label);
-    void createHomePage();
-    void createDataPage();
-    void createPollutantOverviewPage();
-    void createPersistentOrganicPollutantsPage();
-    void createEnvironmentalLitterIndicatorsPage();
-    void createFluorinatedCompoundsPage();
-    void createComplianceDashboardPage();
+    void createPages();
 
   signals:
     void newCSVLoaded();

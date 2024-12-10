@@ -15,14 +15,7 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
   createMainLayout();
   createNavBar();
   createPageArea();
-  createHomePage();
-  createPollutantOverviewPage();
-  createPersistentOrganicPollutantsPage();
-  createEnvironmentalLitterIndicatorsPage();
-  createFluorinatedCompoundsPage();
-  createComplianceDashboardPage();
-  createDataPage();
-
+  createPages();
   setMinimumWidth(MIN_WINDOW_WIDTH);
   setWindowTitle("Water Sample Tool");
 }
@@ -94,49 +87,16 @@ void WaterSampleWindow::addPage(Page* page, const QString& label)
   connect(this, SIGNAL(newCSVLoaded()), page, SLOT(modelUpdated()));
 }
 
-// pages for the application
-void WaterSampleWindow::createHomePage()
+void WaterSampleWindow::createPages()
 {
-  HomePage* page = new HomePage(&model);
-  addPage(page, "Home");
+  addPage(new HomePage(&model), "Home");
+  addPage(new PollutantOverviewPage(&model), "Pollutant Overview Page");
+  addPage(new PersistentOrganicPollutantsPage(&model), "Persistent Organic Pollutants Page");
+  addPage(new EnvironmentalLitterIndicatorsPage(&model), "Environmental Litter Indicators Page");
+  addPage(new FluorinatedCompoundsPage(&model), "Fluorinated Compounds Page");
+  addPage(new ComplianceDashboardPage(&model), "Compliance Dashboard Page");
+  addPage(new DataPage(&model), "Data Page");
 }
-
-void WaterSampleWindow::createPollutantOverviewPage()
-{
-  PollutantOverviewPage* page = new PollutantOverviewPage(&model);
-  addPage(page, "Pollutant Overview Page");
-}
-
-void WaterSampleWindow::createPersistentOrganicPollutantsPage()
-{
-  PersistentOrganicPollutantsPage* page = new PersistentOrganicPollutantsPage(&model);
-  addPage(page, "Persistent Organic Pollutants Page");
-}
-
-void WaterSampleWindow::createEnvironmentalLitterIndicatorsPage()
-{
-  EnvironmentalLitterIndicatorsPage* page = new EnvironmentalLitterIndicatorsPage(&model);
-  addPage(page, "Environmental Litter Indicators Page");
-}
-
-void WaterSampleWindow::createFluorinatedCompoundsPage()
-{
-  FluorinatedCompoundsPage* page = new FluorinatedCompoundsPage(&model);
-  addPage(page, "Fluorinated Compounds Page");
-}
-
-void WaterSampleWindow::createComplianceDashboardPage()
-{
-  ComplianceDashboardPage* page = new ComplianceDashboardPage(&model);
-  addPage(page, "Compliance Dashboard Page");
-}
-
-void WaterSampleWindow::createDataPage()
-{
-  DataPage* page = new DataPage(&model);
-  addPage(page, "Data Page");
-}
-
 
 void WaterSampleWindow::openCSV()
 {
@@ -161,7 +121,6 @@ void WaterSampleWindow::openCSV()
 
   newCSVLoaded();
 }
-
 
 void WaterSampleWindow::about()
 {
