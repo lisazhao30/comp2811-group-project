@@ -2,3 +2,4 @@ build/
 2024-M.csv
 .vscode/
 data.db
+CMakeLists.txt.user

@@ -27,4 +27,37 @@ EnvironmentalLitterIndicatorsPage::EnvironmentalLitterIndicatorsPage(WaterSample
     }
 
     addHorizontalLayout(heroDescription, gifLabel, 20);
+
+    // location filter
+    filterLocationInput = new QLineEdit();
+    filterLocationInput->setPlaceholderText("Search for location");
+    connect(filterLocationInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyLocationFilter(const QString&)));
+    addWidget(filterLocationInput);
+
+    // water body type filter
+    filterWaterBodyTypeInput = new QLineEdit();
+    filterWaterBodyTypeInput->setPlaceholderText("Search for water body type");
+    connect(filterWaterBodyTypeInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyWaterBodyTypeFilter(const QString&)));
+    addWidget(filterWaterBodyTypeInput);
+
+    filterProxyModel = new QSortFilterProxyModel(this);
+    filterProxyModel->setSourceModel(model);
+    filterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    // data table
+    QTableView* table = new QTableView(this);
+    table->setModel(filterProxyModel);
+    QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    table->setFont(tableFont);
+    addWidget(table);
+}
+
+void EnvironmentalLitterIndicatorsPage::applyLocationFilter(const QString& text) {
+    filterProxyModel->setFilterKeyColumn(3);  
+    filterProxyModel->setFilterFixedString(text);
+}
+
+void EnvironmentalLitterIndicatorsPage::applyWaterBodyTypeFilter(const QString& text) {
+    filterProxyModel->setFilterKeyColumn(11);
+    filterProxyModel->setFilterFixedString(text);
 }
