@@ -45,6 +45,50 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     pageLayout->addLayout(horizontalLayout);
 
+    // location filter
+    filterLocationInput = new QLineEdit();
+    filterLocationInput->setPlaceholderText("Search for location");
+    connect(filterLocationInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyLocationFilter(const QString&)));
+    addWidget(filterLocationInput);
+
+    // special proxy model to filter for location and date
+    customProxyModel = new CustomProxyModel(this);
+    customProxyModel->setSourceModel(model);
+    customProxyModel->setDynamicSortFilter(true);
+    customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    // date range labels
+    fromDateEdit = new QDateEdit;
+    fromDateEdit->setDate(QDate(2024, 01, 01));
+    fromLabel = new QLabel(tr("&From:"));
+    fromLabel->setStyleSheet("color: black;");
+    fromLabel->setBuddy(fromDateEdit);
+
+    toDateEdit = new QDateEdit;
+    toDateEdit->setDate(QDate(2024, 12, 31));
+    toLabel = new QLabel(tr("&To:"));
+    toLabel->setStyleSheet("color: black;");
+    toLabel->setBuddy(toDateEdit);
+
+    addWidget(fromLabel);
+    addWidget(fromDateEdit);
+    addWidget(toLabel);
+    addWidget(toDateEdit);
+
+    connect(fromDateEdit, SIGNAL(dateChanged(QDate)),
+            this, SLOT(dateFilterChanged()));
+    connect(toDateEdit, SIGNAL(dateChanged(QDate)),
+            this, SLOT(dateFilterChanged()));
+    
+    // table view
+    QTableView* table = new QTableView(this);
+    table->setModel(customProxyModel);
+    table->setMinimumHeight(400);
+    QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    table->setFont(tableFont);
+
+    addWidget(table);
+
     // add chart and set a min height
     chart = new PollutantTrendLineChart("Nitrate-N", model);
     chartView = new QChartView(chart);
@@ -61,3 +105,15 @@ void HomePage::modelUpdated() {
     
     chart->setAxes();
 }
+
+void HomePage::applyLocationFilter(const QString& text) {
+    std::cout << "applying location filter" << std::endl;
+    customProxyModel->setFilterKeyColumn(3);  
+    customProxyModel->setFilterRegularExpression(text);
+}
+
+void HomePage::dateFilterChanged()
+ {
+    customProxyModel->setFilterMinimumDate(fromDateEdit->date());
+    customProxyModel->setFilterMaximumDate(toDateEdit->date());
+ }

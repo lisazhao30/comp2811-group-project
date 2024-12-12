@@ -16,6 +16,7 @@ qt_add_executable(watersampletool
     pollutant_line_chart.cpp
     window.cpp
     navbar.cpp
+    custom_proxy_model.cpp
     pages/page.cpp
     pages/compliance_dashboard.cpp
     pages/data_page.cpp
