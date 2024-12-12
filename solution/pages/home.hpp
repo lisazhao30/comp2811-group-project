@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QWidget>
+#include <QMovie>
+#include <QPixmap>
 #include <QChart>
 #include <QChartView>
 #include "page.hpp"

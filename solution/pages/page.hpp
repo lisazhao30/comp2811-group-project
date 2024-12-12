@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QScrollArea>
 
 #include "../table_model.hpp"
 
@@ -14,9 +15,10 @@ class Page: public QWidget
         Page(WaterSampleTableModel* model, QWidget* parent = nullptr);
 
         void addHeaderText(const QString& text);
-        void addHeader2Text(const QString& text);
-        void addParagraphText(const QString& text);
+        QLabel* addHeader2Text(const QString& text);
+        QLabel* addParagraphText(const QString& text);
         void addWidget(QWidget* widget);
+        void addHorizontalLayout(QWidget* leftWidget, QWidget* rightWidget, int spacing);
 
     protected:
         QVBoxLayout* pageLayout;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QMovie>
 #include "page.hpp"
 
 class PersistentOrganicPollutantsPage: public Page {
