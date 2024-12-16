@@ -25,6 +25,7 @@ qt_add_executable(watersampletool
     pages/home.cpp
     pages/persistent_organic_pollutants.cpp
     pages/pollutant_overview.cpp
+    data/2024-M_small.csv data/data_small.db
 )
 
 target_link_libraries(watersampletool PRIVATE Qt6::Widgets Qt6::Charts Qt6::Sql)
@@ -33,3 +34,5 @@ set_target_properties(watersampletool PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE OFF
 )
+
+file(COPY data DESTINATION /)

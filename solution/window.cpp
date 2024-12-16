@@ -11,7 +11,7 @@
 
 WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 {
-  model.updateFromFile(QCoreApplication::applicationDirPath() + "/../data/data_small.db");
+  model.updateFromFile(QCoreApplication::applicationDirPath() + "/data/data_small.db");
 
   createMenuBar();
   createMainLayout();
