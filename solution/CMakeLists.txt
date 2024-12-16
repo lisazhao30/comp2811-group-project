@@ -35,4 +35,4 @@ set_target_properties(watersampletool PROPERTIES
     MACOSX_BUNDLE OFF
 )
 
-file(COPY data DESTINATION /)
+file(COPY data DESTINATION ${CMAKE_BINARY_DIR}/)
