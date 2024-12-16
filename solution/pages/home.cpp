@@ -28,7 +28,7 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     // animation
     QLabel* gifLabel = new QLabel(this);
-    QMovie* gif = new QMovie(".. /statics/europe.gif");
+    QMovie* gif = new QMovie("../statics/europe.gif");
     if (!gif->isValid()) 
     {
         std::cout << "error encountered when loading gif" << std::endl;
