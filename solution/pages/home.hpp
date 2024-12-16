@@ -32,8 +32,10 @@ class HomePage: public Page {
 
     private:
         QLineEdit* filterLocationInput;
-        PollutantTrendLineChart* chart;
-        QChartView* chartView;
+        PollutantTrendLineChart* chart1;
+        PollutantTrendLineChart* chart2;
+        PollutantTrendLineChart* chart3;
+        PollutantTrendLineChart* chart4;
     
     private slots:
         void applyLocationFilter(const QString& text);

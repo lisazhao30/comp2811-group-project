@@ -28,9 +28,9 @@ void WaterSampleWindow::createMenuBar()
   QMenuBar *menuBar = new QMenuBar();
   QMenu *fileMenu = menuBar->addMenu("File");
 
-  QAction *openAct = new QAction("Open CSV", this);
+  QAction *openAct = new QAction("Open DB", this);
   openAct->setShortcuts(QKeySequence::Open);
-  openAct->setStatusTip(tr("Open a CSV dataset"));
+  openAct->setStatusTip(tr("Open a SQLite DB"));
   connect(openAct, &QAction::triggered, this, &WaterSampleWindow::openDb);
 
   QAction* aboutAct = new QAction("About", this);
@@ -56,7 +56,7 @@ void WaterSampleWindow::createMainLayout()
   // set background colour
   QPalette pal = QPalette();
   pal.setColor(QPalette::Window, QColor("#FAF5EB"));
-  mainWindowContainer->setAutoFillBackground(true); 
+  mainWindowContainer->setAutoFillBackground(true);
   mainWindowContainer->setPalette(pal);
 
   // create layout box
@@ -92,11 +92,11 @@ void WaterSampleWindow::addPage(Page* page, const QString& label)
 void WaterSampleWindow::createPages()
 {
   addPage(new HomePage(&model), "Home");
-  addPage(new PollutantOverviewPage(&model), "Pollutant Overview Page");
-  addPage(new PersistentOrganicPollutantsPage(&model), "Persistent Organic Pollutants Page");
-  addPage(new EnvironmentalLitterIndicatorsPage(&model), "Environmental Litter Indicators Page");
-  addPage(new FluorinatedCompoundsPage(&model), "Fluorinated Compounds Page");
-  addPage(new ComplianceDashboardPage(&model), "Compliance Dashboard Page");
+  addPage(new PollutantOverviewPage(&model), "Pollutant Overview");
+  addPage(new PersistentOrganicPollutantsPage(&model), "Persistent Organic Pollutants");
+  addPage(new EnvironmentalLitterIndicatorsPage(&model), "Environmental Litter Indicators");
+  addPage(new FluorinatedCompoundsPage(&model), "Fluorinated Compounds");
+  addPage(new ComplianceDashboardPage(&model), "Compliance Dashboard");
   addPage(new DataPage(&model), "Data Page");
 }
 
@@ -127,5 +127,5 @@ void WaterSampleWindow::openDb()
 void WaterSampleWindow::about()
 {
   QMessageBox::about(this, "About Water Quality Monitor",
-    "Water Sample Tool displays and analyzes water sample data");
+    "Water Quality Monitor displays and analyzes water sample data from a SQL Database");
 }

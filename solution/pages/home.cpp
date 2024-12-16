@@ -24,9 +24,11 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     verticalLayout->addWidget(subHeaderText);
     verticalLayout->addWidget(paragraphText);
 
+    // TODO: copy statics folder to build dir
+
     // animation
     QLabel* gifLabel = new QLabel(this);
-    QMovie* gif = new QMovie("../statics/europe.gif");
+    QMovie* gif = new QMovie(".. /statics/europe.gif");
     if (!gif->isValid()) 
     {
         std::cout << "error encountered when loading gif" << std::endl;
@@ -44,6 +46,8 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     horizontalLayout->setContentsMargins(0,40,0,40);
 
     pageLayout->addLayout(horizontalLayout);
+
+    addHeaderText("Pollutant Overview");
 
     // location filter
     filterLocationInput = new QLineEdit();
@@ -79,31 +83,63 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
             this, SLOT(dateFilterChanged()));
     connect(toDateEdit, SIGNAL(dateChanged(QDate)),
             this, SLOT(dateFilterChanged()));
-    
-    // table view
-    QTableView* table = new QTableView(this);
-    table->setModel(customProxyModel);
-    table->setMinimumHeight(400);
-    QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-    table->setFont(tableFont);
 
-    addWidget(table);
+    //QWidget* wrapper = new QWidget();
+    //addWidget(wrapper);
 
-    // add chart and set a min height
-    chart = new PollutantTrendLineChart("Nitrate-N", model);
-    chartView = new QChartView(chart);
-    chartView->setRenderHint(QPainter::Antialiasing);
-    chartView->setMinimumHeight(400);
-    addWidget(chartView);
+    QGridLayout* grid = new QGridLayout();
+    pageLayout->addLayout(grid);
+
+    // TODO: change `model` to proxy model, requires parameter type change
+    // TODO: set `PollutantTrendLineSeries` filter match to exact
+
+    // add charts and set a min height
+    chart1 = new PollutantTrendLineChart("Nitrate-N", model);
+    chart1->setTitle("Nitrate-N");
+    QChartView* chartView1 = new QChartView(chart1);
+    chartView1->setMinimumHeight(400);
+    grid->addWidget(chartView1, 0, 0);
+
+    chart2 = new PollutantTrendLineChart("O Diss %sat", model);
+    chart2->setTitle("Dissolved Oxygen Saturation %");
+    QChartView* chartView2 = new QChartView(chart2);
+    chartView2->setMinimumHeight(400);
+    grid->addWidget(chartView2, 0, 1);
+
+    chart3 = new PollutantTrendLineChart("pH", model);
+    chart3->setTitle("pH");
+    QChartView* chartView3 = new QChartView(chart3);
+    chartView3->setMinimumHeight(400);
+    grid->addWidget(chartView3, 1, 0);
+
+    chart4 = new PollutantTrendLineChart("K- Filtered", model);
+    chart4->setTitle("Potassium");
+    QChartView* chartView4 = new QChartView(chart4);
+    chartView4->setMinimumHeight(400);
+    grid->addWidget(chartView4, 1, 1);
 }
 
 void HomePage::modelUpdated() {
-    auto series = chart->series().at(0);
-    // Refreshes the chart, probably shouldn't need this, bug?
-    chart->removeSeries(series);
-    chart->addSeries(series);
-    
-    chart->setAxes();
+    // Refreshes the chart
+    auto series1 = chart1->series().at(0);
+    chart1->removeSeries(series1);
+    chart1->addSeries(series1);
+    chart1->setAxes();
+
+    auto series2 = chart2->series().at(0);
+    chart2->removeSeries(series2);
+    chart2->addSeries(series2);
+    chart2->setAxes();
+
+    auto series3 = chart3->series().at(0);
+    chart3->removeSeries(series3);
+    chart3->addSeries(series3);
+    chart3->setAxes();
+
+    auto series4 = chart4->series().at(0);
+    chart4->removeSeries(series4);
+    chart4->addSeries(series4);
+    chart4->setAxes();
 }
 
 void HomePage::applyLocationFilter(const QString& text) {

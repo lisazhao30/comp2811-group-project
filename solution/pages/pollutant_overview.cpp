@@ -1,3 +1,4 @@
+#include <QCompleter>
 #include "pollutant_overview.hpp"
 
 PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
@@ -31,6 +32,16 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
 
     // add search functionality for pollutant
     filterInput = new QLineEdit();
+
+    // Inline autocomplete on search
+    QCompleter* completer = new QCompleter(this);
+    completer->setModel(model);
+    completer->setCompletionColumn(5);
+    completer->setCompletionMode(QCompleter::CompletionMode::InlineCompletion);
+    completer->setCompletionRole(Qt::DisplayRole);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+
+    filterInput->setCompleter(completer);
     filterInput->setPlaceholderText("Search for pollutant");
     connect(filterInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
     addWidget(filterInput);
