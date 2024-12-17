@@ -24,8 +24,6 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     verticalLayout->addWidget(subHeaderText);
     verticalLayout->addWidget(paragraphText);
 
-    // TODO: copy statics folder to build dir
-
     // animation
     QLabel* gifLabel = new QLabel(this);
     QMovie* gif = new QMovie(QCoreApplication::applicationDirPath() + "/statics/europe.gif");
@@ -91,28 +89,27 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     pageLayout->addLayout(grid);
 
     // TODO: change `model` to proxy model, requires parameter type change
-    // TODO: set `PollutantTrendLineSeries` filter match to exact
 
     // add charts and set a min height
-    chart1 = new PollutantTrendLineChart("Nitrate-N", model);
+    chart1 = new PollutantTrendLineChart("Nitrate-N", customProxyModel);
     chart1->setTitle("Nitrate-N");
     QChartView* chartView1 = new QChartView(chart1);
     chartView1->setMinimumHeight(400);
     grid->addWidget(chartView1, 0, 0);
 
-    chart2 = new PollutantTrendLineChart("O Diss %sat", model);
+    chart2 = new PollutantTrendLineChart("O Diss %sat", customProxyModel);
     chart2->setTitle("Dissolved Oxygen Saturation %");
     QChartView* chartView2 = new QChartView(chart2);
     chartView2->setMinimumHeight(400);
     grid->addWidget(chartView2, 0, 1);
 
-    chart3 = new PollutantTrendLineChart("pH", model);
+    chart3 = new PollutantTrendLineChart("pH", customProxyModel);
     chart3->setTitle("pH");
     QChartView* chartView3 = new QChartView(chart3);
     chartView3->setMinimumHeight(400);
     grid->addWidget(chartView3, 1, 0);
 
-    chart4 = new PollutantTrendLineChart("Temp Water", model);
+    chart4 = new PollutantTrendLineChart("Temp Water", customProxyModel);
     chart4->setTitle("Water Temperature");
     QChartView* chartView4 = new QChartView(chart4);
     chartView4->setMinimumHeight(400);

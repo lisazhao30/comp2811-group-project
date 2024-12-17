@@ -2,7 +2,7 @@
 
 PollutantTrendLineSeries::PollutantTrendLineSeries(
     const QString& pollutant,
-    WaterSampleTableModel* model
+    QAbstractItemModel* model
 )
 {
     timeSinceEpochProxyModel = new WaterSampleTableTimeSinceEpochProxy(this);
@@ -24,7 +24,7 @@ PollutantTrendLineSeries::PollutantTrendLineSeries(
 
 PollutantTrendLineChart::PollutantTrendLineChart(
     const QString& pollutant,
-    WaterSampleTableModel* model,
+    QAbstractItemModel* model,
     QGraphicsItem *parent
 ): QChart(parent)
 {
