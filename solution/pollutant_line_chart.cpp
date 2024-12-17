@@ -10,7 +10,7 @@ PollutantTrendLineSeries::PollutantTrendLineSeries(
 
     filterProxyModel = new QSortFilterProxyModel(this);
     filterProxyModel->setSourceModel(timeSinceEpochProxyModel);
-    filterProxyModel->setFilterFixedString(pollutant);
+    filterProxyModel->setFilterRegularExpression('^' + pollutant + '$');
     filterProxyModel->setFilterKeyColumn(5);
     filterProxyModel->sort(4);
 

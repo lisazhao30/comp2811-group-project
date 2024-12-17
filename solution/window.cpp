@@ -9,9 +9,10 @@
 WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 {
   createLoadingPopup();
-  loadingPopup->open();
 
-  model.updateFromFile(QCoreApplication::applicationDirPath() + "/data/data_small.db");
+  loadingPopup->open();
+  model.updateFromFile(QCoreApplication::applicationDirPath() + "/data/2024_small.db");
+  loadingPopup->close();
 
   createMenuBar();
   createMainLayout();
@@ -27,6 +28,7 @@ void WaterSampleWindow::createLoadingPopup() {
     loadingPopup->setMinimumSize(300, 150);
 
     QVBoxLayout* dialogLayout = new QVBoxLayout();
+    dialogLayout->setAlignment(Qt::AlignCenter);
     QLabel* text = new QLabel("Loading Database...");
     progressBar = new QProgressBar();
     progressBar->setRange(0, 100);
@@ -134,7 +136,9 @@ void WaterSampleWindow::openDb()
   }
 
   try {
+    loadingPopup->open();
     model.updateFromFile(filename);
+    loadingPopup->close();
   }
   catch (const std::exception& error) {
     QMessageBox::critical(this, "DB File Error", error.what());

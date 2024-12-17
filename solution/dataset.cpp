@@ -27,7 +27,8 @@ void WaterDataset::loadData(const QString& filename)
   QSqlQuery query;
   query.exec("SELECT * FROM water_samples");
 
-  int i = 0;
+  float size = (float)query.size();
+  float i = 0;
 
   while (query.next()) {
     ResultQualifierNotation result_qualifier_notation = ResultQualifierNotation::Empty;
@@ -62,8 +63,8 @@ void WaterDataset::loadData(const QString& filename)
     };
     data.push_back(water_sample);
 
-    i++;
-    updateLoadingProgress(i);
+    i = i + 1.0;
+    updateLoadingProgress((int)i/size);
   }
 
   db.close();
