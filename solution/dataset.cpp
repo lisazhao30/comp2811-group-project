@@ -9,6 +9,20 @@
 
 using namespace std;
 
+int sqlSize(QSqlQuery query)
+{
+    int initialPos = query.at();
+    // Very strange but for no records .at() returns -2
+    int pos = 0;
+    if (query.last())
+        pos = query.at() + 1;
+    else
+        pos = 0;
+    // Important to restore initial pos
+    query.seek(initialPos);
+    return pos;
+}
+
 void WaterDataset::loadData(const QString& filename)
 {
   if (!QFile::exists(filename)) {
@@ -27,7 +41,11 @@ void WaterDataset::loadData(const QString& filename)
   QSqlQuery query;
   query.exec("SELECT * FROM water_samples");
 
-  float size = (float)query.size();
+  int initialPosition = query.at();
+  query.last();
+  int size = query.at() + 1;
+  query.seek(initialPosition);
+
   float i = 0;
 
   while (query.next()) {
@@ -64,7 +82,9 @@ void WaterDataset::loadData(const QString& filename)
     data.push_back(water_sample);
 
     i = i + 1.0;
-    updateLoadingProgress((int)i/size);
+    int percent = (int)((i/size)*100.0);
+
+    updateLoadingProgress(percent);
   }
 
   db.close();

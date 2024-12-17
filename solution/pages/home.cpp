@@ -28,7 +28,7 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     // animation
     QLabel* gifLabel = new QLabel(this);
-    QMovie* gif = new QMovie("../statics/europe.gif");
+    QMovie* gif = new QMovie(QCoreApplication::applicationDirPath() + "/statics/europe.gif");
     if (!gif->isValid()) 
     {
         std::cout << "error encountered when loading gif" << std::endl;
@@ -112,8 +112,8 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     chartView3->setMinimumHeight(400);
     grid->addWidget(chartView3, 1, 0);
 
-    chart4 = new PollutantTrendLineChart("K- Filtered", model);
-    chart4->setTitle("Potassium");
+    chart4 = new PollutantTrendLineChart("Temp Water", model);
+    chart4->setTitle("Water Temperature");
     QChartView* chartView4 = new QChartView(chart4);
     chartView4->setMinimumHeight(400);
     grid->addWidget(chartView4, 1, 1);

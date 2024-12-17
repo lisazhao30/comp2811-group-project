@@ -36,3 +36,4 @@ set_target_properties(watersampletool PROPERTIES
 )
 
 file(COPY data DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY statics DESTINATION ${CMAKE_BINARY_DIR}/)

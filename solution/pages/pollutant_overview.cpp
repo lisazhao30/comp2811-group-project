@@ -15,7 +15,7 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
 
     // animation
     QLabel* gifLabel = new QLabel(this);
-    QMovie* gif = new QMovie("../statics/water-pollution.gif");
+    QMovie* gif = new QMovie(QCoreApplication::applicationDirPath() + "/statics/water-pollution.gif");
     if (!gif->isValid()) 
     {
         std::cout << "error encountered when loading gif" << std::endl;

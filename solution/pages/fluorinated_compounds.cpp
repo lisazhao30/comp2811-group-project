@@ -14,7 +14,7 @@ FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model,
 
     // animation
     QLabel* gifLabel = new QLabel(this);
-    QMovie* gif = new QMovie("../statics/water-pollution-4.gif");
+    QMovie* gif = new QMovie(QCoreApplication::applicationDirPath() + "/statics/water-pollution-4.gif");
     if (!gif->isValid()) 
     {
         std::cout << "error encountered when loading gif" << std::endl;
