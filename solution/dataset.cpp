@@ -27,6 +27,8 @@ void WaterDataset::loadData(const QString& filename)
   QSqlQuery query;
   query.exec("SELECT * FROM water_samples");
 
+  int i = 0;
+
   while (query.next()) {
     ResultQualifierNotation result_qualifier_notation = ResultQualifierNotation::Empty;
     QString result_qualifier_string = query.value("resultQualifier.notation").toString();
@@ -59,6 +61,9 @@ void WaterDataset::loadData(const QString& filename)
       query.value("sample.samplingPoint.northing").toInt()
     };
     data.push_back(water_sample);
+
+    i++;
+    updateLoadingProgress(i);
   }
 
   db.close();

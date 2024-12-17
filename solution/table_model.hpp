@@ -6,6 +6,8 @@
 
 class WaterSampleTableModel: public QAbstractTableModel
 {
+
+
   public:
     WaterSampleTableModel(QObject* parent = nullptr): QAbstractTableModel(parent) {}
     void updateFromFile(const QString&);
@@ -16,8 +18,12 @@ class WaterSampleTableModel: public QAbstractTableModel
     QVariant data(const QModelIndex&, int) const;
     QVariant headerData(int, Qt::Orientation, int) const;
 
+    WaterDataset* getDataset() { return &dataset; }
+
   private:
     WaterDataset dataset;
+
+
 };
 
 class WaterSampleTableTimeSinceEpochProxy: public QIdentityProxyModel

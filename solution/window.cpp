@@ -1,7 +1,4 @@
 #include <QtWidgets>
-#include <QChart>
-#include <QDateTimeAxis>
-#include <QValueAxis>
 #include <QTabWidget>
 #include <stdexcept>
 #include <iostream>
@@ -11,6 +8,9 @@
 
 WaterSampleWindow::WaterSampleWindow(): QMainWindow()
 {
+  createLoadingPopup();
+  loadingPopup->open();
+
   model.updateFromFile(QCoreApplication::applicationDirPath() + "/data/data_small.db");
 
   createMenuBar();
@@ -20,6 +20,26 @@ WaterSampleWindow::WaterSampleWindow(): QMainWindow()
   createPages();
   setMinimumWidth(MIN_WINDOW_WIDTH);
   setWindowTitle("Water Quality Monitor");
+}
+
+void WaterSampleWindow::createLoadingPopup() {
+    loadingPopup = new QDialog(this);
+    loadingPopup->setMinimumSize(300, 150);
+
+    QVBoxLayout* dialogLayout = new QVBoxLayout();
+    QLabel* text = new QLabel("Loading Database...");
+    progressBar = new QProgressBar();
+    progressBar->setRange(0, 100);
+    dialogLayout->addWidget(text);
+    dialogLayout->addWidget(progressBar);
+
+    loadingPopup->setLayout(dialogLayout);
+
+    connect(model.getDataset(), SIGNAL(updateLoadingProgress(int)), this, SLOT(updateDatabaseProgress(int)));
+}
+
+void WaterSampleWindow::updateDatabaseProgress(int percent) {
+    progressBar->setValue(percent);
 }
 
 void WaterSampleWindow::createMenuBar()

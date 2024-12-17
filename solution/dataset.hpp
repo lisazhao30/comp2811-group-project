@@ -2,10 +2,13 @@
 
 #include <vector>
 #include <QString>
+#include <QObject>
 #include "water_sample.hpp"
 
-class WaterDataset
+class WaterDataset: public QObject
 {
+    Q_OBJECT
+
   public:
     WaterDataset() {}
     WaterDataset(const QString& filename) { loadData(filename); }
@@ -16,4 +19,7 @@ class WaterDataset
   private:
     std::vector<WaterSample> data;
     void checkDataExists() const;
+
+  signals:
+    void updateLoadingProgress(int percent);
 };

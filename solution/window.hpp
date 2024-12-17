@@ -8,6 +8,8 @@
 #include <QScrollArea>
 #include <QStackedWidget>
 #include <QPalette>
+#include <QDialog>
+#include <QProgressBar>
 
 #include "table_model.hpp"
 #include "pollutant_line_chart.hpp"
@@ -43,9 +45,12 @@ class WaterSampleWindow: public QMainWindow
     QTabWidget* tabSwitcher;
     QScrollArea* scrollArea;
     QStackedWidget* pagesStackedWidget;
+    QDialog* loadingPopup;
+    QProgressBar* progressBar;
 
     WaterSampleTableModel model;
 
+    void createLoadingPopup();
     void createMenuBar();
     void createMainLayout();
     void createNavBar();
@@ -59,4 +64,5 @@ class WaterSampleWindow: public QMainWindow
   private slots:
     void openDb();
     void about();
+    void updateDatabaseProgress(int percent);
 };
