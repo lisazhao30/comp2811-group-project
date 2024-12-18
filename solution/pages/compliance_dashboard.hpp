@@ -14,6 +14,7 @@
 #include "../table_model.hpp"
 #include "../custom_proxy_model.hpp"
 #include "../pollutant_line_chart.hpp"
+#include "../pollutant_scatter_chart.hpp"
 
 class ComplianceDashboardPage: public Page {
     Q_OBJECT // Q_OBJECT required for signals
@@ -29,7 +30,7 @@ class ComplianceDashboardPage: public Page {
         QLineEdit* filterLocationInput;
         QSortFilterProxyModel* filterProxyModel;
         CustomProxyModel* customProxyModel;
-        PollutantTrendLineChart* chart;
+        PollutantScatterChart* scatterChart;
 
     private slots:
         void applyFilter(const QString& text);

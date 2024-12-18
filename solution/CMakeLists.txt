@@ -14,6 +14,7 @@ qt_add_executable(watersampletool
     dataset.cpp
     table_model.cpp
     pollutant_line_chart.cpp
+    pollutant_scatter_chart.cpp
     window.cpp
     navbar.cpp
     custom_proxy_model.cpp

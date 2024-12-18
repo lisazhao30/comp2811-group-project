@@ -75,20 +75,20 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
 
     addWidget(table);
 
-    // add charts
-    chart = new PollutantTrendLineChart("Nitrate-N", customProxyModel);
-    chart->setTitle("Pollutant Overview");
-    QChartView* chartView = new QChartView(chart);
-    chartView->setMinimumHeight(400);
-    addWidget(chartView);
+    // chart isn't refreshing???
+    scatterChart = new PollutantScatterChart("Nitrate-N", customProxyModel);
+    scatterChart->setTitle("Compliance Overview");
+    QChartView* scatterChartView = new QChartView(scatterChart);
+    scatterChartView->setMinimumHeight(400);
+    addWidget(scatterChartView);
 }
 
 void ComplianceDashboardPage::modelUpdated() {
     // Refreshes the chart
-    auto series1 = chart->series().at(0);
-    chart->removeSeries(series1);
-    chart->addSeries(series1);
-    chart->setAxes();
+    auto series1 = scatterChart->series().at(0);
+    scatterChart->removeSeries(series1);
+    scatterChart->addSeries(series1);
+    scatterChart->setAxes();
 }
 
 void ComplianceDashboardPage::applyFilter(const QString& text) {
