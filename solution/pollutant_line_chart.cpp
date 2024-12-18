@@ -82,11 +82,6 @@ std::tuple<QDateTime, QDateTime, double, double> PollutantTrendLineChart::getAxi
     QDateTime max_date = QDateTime();
     max_date.setMSecsSinceEpoch((qint64)max_secs);
 
-    QDateTime test = QDateTime();
-    test.setSecsSinceEpoch(0);
-
-    qDebug() << (int)min_secs << min_date << test;
-
     return {min_date, max_date, min_y, max_y};
 }
 
