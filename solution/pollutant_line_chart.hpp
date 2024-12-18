@@ -31,5 +31,7 @@ class PollutantTrendLineChart: public QChart
         void setAxes();
     
     private:
+        std::tuple<QDateTime, QDateTime, double, double> getAxisBounds();
+
         QList<PollutantTrendLineSeries*> pollutant_series;
 };

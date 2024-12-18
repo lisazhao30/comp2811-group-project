@@ -155,4 +155,9 @@ void HomePage::dateFilterChanged()
  {
     customProxyModel->setFilterMinimumDate(fromDateEdit->date());
     customProxyModel->setFilterMaximumDate(toDateEdit->date());
+
+    chart1->setAxes();
+    chart2->setAxes();
+    chart3->setAxes();
+    chart4->setAxes();
  }

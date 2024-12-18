@@ -56,21 +56,53 @@ PollutantTrendLineChart::PollutantTrendLineChart(
     setAxes();
 }
 
+std::tuple<QDateTime, QDateTime, double, double> PollutantTrendLineChart::getAxisBounds() {
+    double min_secs = std::numeric_limits<double>::max();
+    double max_secs = 0;
+    double min_y = std::numeric_limits<double>::max();
+    double max_y = 0;
+
+    for (const auto& series : pollutant_series) {
+        for (auto p : series->points()) {
+            min_secs = qMin(min_secs, p.x());
+            max_secs = qMax(max_secs, p.x());
+            min_y = qMin(min_y, p.y());
+            max_y = qMax(max_y, p.y());
+        }
+    }
+
+    QDateTime min_date = QDateTime();
+    min_date.setMSecsSinceEpoch((qint64)min_secs);
+    QDateTime max_date = QDateTime();
+    max_date.setMSecsSinceEpoch((qint64)max_secs);
+
+    QDateTime test = QDateTime();
+    test.setSecsSinceEpoch(0);
+
+    qDebug() << (int)min_secs << min_date << test;
+
+    return {min_date, max_date, min_y, max_y};
+}
+
 void PollutantTrendLineChart::setAxes()
 {
     for (auto axis : axes()) {
         removeAxis(axis);
     }
 
+    const auto bounds = getAxisBounds();
+
     auto axisX = new QDateTimeAxis;
     axisX->setTickCount(10);
     axisX->setFormat("MMM yyyy");
     axisX->setTitleText("Date");
+    axisX->setRange(std::get<0>(bounds), std::get<1>(bounds));
     addAxis(axisX, Qt::AlignBottom);
 
     auto axisY = new QValueAxis;
     axisY->setLabelFormat("%.2f");
     axisY->setTitleText("Result");
+    axisY->setRange(std::get<2>(bounds), std::get<3>(bounds));
     addAxis(axisY, Qt::AlignLeft);
 
     for (auto series : pollutant_series) {
