@@ -21,7 +21,6 @@ class PollutantScatterSeries: public QLineSeries
         PollutantScatterSeries(const QString& pollutant, QAbstractItemModel* model);
 
         void updateComplianceColors();
-        // Provide a getter for scatterSeries
         QScatterSeries* getScatterSeries() const {
             return scatterSeries;
         }
@@ -29,9 +28,7 @@ class PollutantScatterSeries: public QLineSeries
     private:
         WaterSampleTableTimeSinceEpochProxy* timeSinceEpochProxyModel;
         QSortFilterProxyModel* filterProxyModel;
-        QVXYModelMapper* mapper;
-        QScatterSeries *scatterSeries;  // Scatter series to hold data points for the chart
-        QList<QColor> pointColors;  // To store compliance colors for each data point
+        QScatterSeries *scatterSeries; 
 };
 
 class PollutantScatterChart : public QChart
@@ -40,15 +37,14 @@ class PollutantScatterChart : public QChart
 
     public:
         PollutantScatterChart(
-            const QString &pollutant,                // Name of the pollutant
+            const QString &pollutant,              
             QAbstractItemModel *model, 
-            QGraphicsItem *parent = nullptr           // The model containing data
+            QGraphicsItem *parent = nullptr           
         );
 
-        // Optional: Set up axes (X, Y) if not done elsewhere
         void setAxes();
 
     private:
-        PollutantScatterSeries* pollutant_series;  // Pollutant trend series for this chart
+        PollutantScatterSeries* pollutant_series; 
 };
 
