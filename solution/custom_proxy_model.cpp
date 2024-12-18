@@ -29,6 +29,7 @@ bool CustomProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &source
     QModelIndex dateIndex = sourceModel()->index(sourceRow, 4, sourceParent);
     QModelIndex locationIndex = sourceModel()->index(sourceRow, 3, sourceParent);
     QModelIndex pollutantIndex = sourceModel()->index(sourceRow, 5, sourceParent); 
+    QModelIndex waterBodyIndex = sourceModel()->index(sourceRow, 11, sourceParent);
     
     QDate date = sourceModel()->data(dateIndex).toDate();
     QString pollutant = sourceModel()->data(pollutantIndex).toString();
@@ -44,7 +45,12 @@ bool CustomProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &source
 
     bool locationMatch = true;
     if (!locationFilterRegex.pattern().isEmpty()) { 
-        locationMatch = sourceModel()->data(locationIndex).toString().contains(locationFilterRegex);  // Apply location filter
+        locationMatch = sourceModel()->data(locationIndex).toString().contains(locationFilterRegex);  
+    }
+
+    bool waterBodyTypeMatch = true;
+    if (!waterBodyFilterRegex.pattern().isEmpty()) {
+        waterBodyTypeMatch = sourceModel()->data(locationIndex).toString().contains(waterBodyFilterRegex);
     }
 
     // std::cout << "Pollutant filter pattern: " << pollutantFilterRegex.pattern().toStdString() << std::endl;
@@ -54,7 +60,7 @@ bool CustomProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &source
     // std::cout << "dateInRange: " << dateInRange(date) << std::endl;
     // std::cout << "pollutantMatch: " << pollutantMatch << std::endl;
 
-    return pollutantFilter && locationMatch && dateInRange(date) && pollutantMatch;
+    return pollutantFilter && locationMatch && waterBodyTypeMatch && dateInRange(date) && pollutantMatch;
 }
 
 bool CustomProxyModel::dateInRange(const QDate &date) const
@@ -73,5 +79,12 @@ void CustomProxyModel::setLocationFilter(const QString &text)
 {
     locationFilterRegex.setPattern(text);
     locationFilterRegex.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+    invalidateFilter(); 
+}
+
+void CustomProxyModel::setWaterBodyFilter(const QString &text)
+{
+    waterBodyFilterRegex.setPattern(text);
+    waterBodyFilterRegex.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
     invalidateFilter(); 
 }

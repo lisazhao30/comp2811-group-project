@@ -52,7 +52,13 @@ PollutantTrendLineChart::PollutantTrendLineChart(
         addSeries(series);
         pollutant_series.append(series);
     }
+    setAxes();
+}
 
+// manually call setAxes() again to update it
+void PollutantTrendLineChart::setVerticalAxisTitle(const QString &title)
+{
+    verticalTitle = title;
     setAxes();
 }
 
@@ -101,7 +107,7 @@ void PollutantTrendLineChart::setAxes()
 
     auto axisY = new QValueAxis;
     axisY->setLabelFormat("%.2f");
-    axisY->setTitleText("Result");
+    axisY->setTitleText(verticalTitle);
     axisY->setRange(std::get<2>(bounds), std::get<3>(bounds));
     addAxis(axisY, Qt::AlignLeft);
 

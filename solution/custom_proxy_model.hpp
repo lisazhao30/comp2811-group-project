@@ -15,6 +15,7 @@ public:
     void setAllowedPollutants(const QStringList &pollutants);
     void setPollutantFilter(const QString &text);
     void setLocationFilter(const QString &text);
+    void setWaterBodyFilter(const QString &text);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
@@ -24,6 +25,7 @@ private:
 
     QRegularExpression pollutantFilterRegex; 
     QRegularExpression locationFilterRegex;
+    QRegularExpression waterBodyFilterRegex;
     QDate minDate;
     QDate maxDate;
     QStringList allowedPollutants;

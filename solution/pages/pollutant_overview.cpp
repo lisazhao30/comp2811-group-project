@@ -54,7 +54,8 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     customProxyModel->setSourceModel(model);
     customProxyModel->setDynamicSortFilter(true);
     // specify pollutants allowed
-    customProxyModel->setAllowedPollutants({"Nitrate-N"});
+    customProxyModel->setAllowedPollutants({"Nitrate-N", "Nitrate Filt", "Phosphate", "Orthophospht",
+        "Pb Filtered", "Lead - as Pb", "Pb BLM Bio", "Chloroform", "123TriClProp", "1,2,3-TCB"});
     customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     // add table for testing
@@ -67,8 +68,10 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     addWidget(table);
 
     // add charts
-    chart = new PollutantTrendLineChart("Nitrate-N", customProxyModel);
-    chart->setTitle("Pollutant Overview");
+    chart = new PollutantTrendLineChart({"Lead - as Pb", "Nitrate-N", "Nitrate Filt", "Phosphate", "Orthophospht",
+        "Pb Filtered", "Pb BLM Bio", "Chloroform", "123TriClProp", "1,2,3-TCB"}, customProxyModel);
+    chart->setVerticalAxisTitle("Pollutant Unit (mg/L)");
+    chart->setTitle("Pollutant Levels vs. Date");
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);

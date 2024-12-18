@@ -41,6 +41,8 @@ FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model,
     customFluorinatedProxyModel->setSourceModel(model);
     customFluorinatedProxyModel->setDynamicSortFilter(true);
     // specify pollutants allowed
+    customFluorinatedProxyModel->setAllowedPollutants({"PFOS", "PFOS (B)", "PFHxS-L", "PFMOPrA",
+    "PFNS", "PFHxS-L","PFHpS"});
     customFluorinatedProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     // add table for testing
@@ -53,8 +55,10 @@ FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model,
     addWidget(table);
 
     // add charts
-    chart = new PollutantTrendLineChart("Nitrate-N", customFluorinatedProxyModel);
-    chart->setTitle("Pollutant Overview");
+    chart = new PollutantTrendLineChart({"PFOS", "PFOS (B)", "PFHxS-L", "PFMOPrA",
+    "PFNS", "PFHxS-L","PFHpS"}, customFluorinatedProxyModel);
+    chart->setTitle("Fluorinated Compounds vs. Date");
+    chart->setVerticalAxisTitle("Fluorinated Compound Unit (ug/L)");
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);

@@ -1,7 +1,7 @@
 #include "persistent_organic_pollutants.hpp"
 
 /*
-Organic pollutants: PCBs
+Organic pollutants: PCB Con 028
 */
 
 PersistentOrganicPollutantsPage::PersistentOrganicPollutantsPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
@@ -30,4 +30,38 @@ PersistentOrganicPollutantsPage::PersistentOrganicPollutantsPage(WaterSampleTabl
     }
 
     addHorizontalLayout(heroDescription, gifLabel, 20);
+
+    // create filter proxy model
+    customProxyModel = new CustomProxyModel(this);
+    customProxyModel->setSourceModel(model);
+    customProxyModel->setDynamicSortFilter(true);
+    // specify pollutants allowed
+    customProxyModel->setAllowedPollutants({"PCB Con 028", "PCB Con 101", "PCB Con 118", 
+        "PCB Con 153", "PCB Con 180", "PCB 118 DW", "PCB 170 DW"});
+    customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    // add table for testing
+    QTableView* table = new QTableView(this);
+    table->setModel(customProxyModel);
+    table->setMinimumHeight(400);
+    QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    table->setFont(tableFont);
+
+    addWidget(table);
+
+    // add charts
+    chart = new PollutantTrendLineChart({"PCB Con 028", "PCB Con 101", "PCB Con 118", 
+        "PCB Con 153", "PCB Con 180", "PCB 118 DW", "PCB 170 DW"}, customProxyModel);
+    chart->setTitle("PCB Levels vs. Date");
+    QChartView* chartView = new QChartView(chart);
+    chartView->setMinimumHeight(400);
+    addWidget(chartView);
+}
+
+void PersistentOrganicPollutantsPage::modelUpdated() {
+    // Refreshes the chart
+    auto series1 = chart->series().at(0);
+    chart->removeSeries(series1);
+    chart->addSeries(series1);
+    chart->setAxes();
 }

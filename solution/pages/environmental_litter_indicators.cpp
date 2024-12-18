@@ -1,4 +1,7 @@
 #include "environmental_litter_indicators.hpp"
+/*
+Pollutants include: Bathers 100m, BWP - Ma, BWP - A.F., BWP - O.L., Sld Sus@105C, BOD ATU, TarryResidus
+*/
 
 EnvironmentalLitterIndicatorsPage::EnvironmentalLitterIndicatorsPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
     addHeader2Text("Environmental Litter Indicators:\nTracking Trends, Risks, and Compliance");
@@ -40,24 +43,46 @@ EnvironmentalLitterIndicatorsPage::EnvironmentalLitterIndicatorsPage(WaterSample
     connect(filterWaterBodyTypeInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyWaterBodyTypeFilter(const QString&)));
     addWidget(filterWaterBodyTypeInput);
 
-    filterProxyModel = new QSortFilterProxyModel(this);
-    filterProxyModel->setSourceModel(model);
-    filterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    // create filter proxy model
+    customProxyModel = new CustomProxyModel(this);
+    customProxyModel->setSourceModel(model);
+    customProxyModel->setDynamicSortFilter(true);
+    // specify pollutants allowed
+    customProxyModel->setAllowedPollutants({"Bathers 100m", "BWP - Ma", "BWP - A.F.", 
+        "BWP - O.L.", "Sld Sus@105C", "BOD ATU", "TarryResidus"});
+    customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-    // data table
+    // add table for testing
     QTableView* table = new QTableView(this);
-    table->setModel(filterProxyModel);
+    table->setModel(customProxyModel);
+    table->setMinimumHeight(400);
     QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     table->setFont(tableFont);
+
     addWidget(table);
+
+    // add charts
+    chart = new PollutantTrendLineChart({"Bathers 100m", "BWP - Ma", "BWP - A.F.", 
+        "BWP - O.L.", "Sld Sus@105C", "BOD ATU", "TarryResidus"}, customProxyModel);
+    chart->setVerticalAxisTitle("Pollutant Unit (garber c)");
+    chart->setTitle("Environmental Litter Levels vs. Date");
+    QChartView* chartView = new QChartView(chart);
+    chartView->setMinimumHeight(400);
+    addWidget(chartView);
 }
 
 void EnvironmentalLitterIndicatorsPage::applyLocationFilter(const QString& text) {
-    filterProxyModel->setFilterKeyColumn(3);  
-    filterProxyModel->setFilterFixedString(text);
+    customProxyModel->setLocationFilter(text);
 }
 
 void EnvironmentalLitterIndicatorsPage::applyWaterBodyTypeFilter(const QString& text) {
-    filterProxyModel->setFilterKeyColumn(11);
-    filterProxyModel->setFilterFixedString(text);
+    customProxyModel->setWaterBodyFilter(text);
+}
+
+void EnvironmentalLitterIndicatorsPage::modelUpdated() {
+    // Refreshes the chart
+    auto series1 = chart->series().at(0);
+    chart->removeSeries(series1);
+    chart->addSeries(series1);
+    chart->setAxes();
 }
