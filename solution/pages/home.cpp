@@ -98,7 +98,7 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     pageLayout->addLayout(grid);
 
     // add charts and set a min height
-    chart1 = new PollutantTrendLineChart("Nitrate-N", customProxyModel);
+    chart1 = new PollutantTrendLineChart({"Nitrate-N", "pH"}, customProxyModel);
     chart1->setTitle("Nitrate-N");
     QChartView* chartView1 = new QChartView(chart1);
     chartView1->setMinimumHeight(400);

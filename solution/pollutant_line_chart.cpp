@@ -2,8 +2,9 @@
 
 PollutantTrendLineSeries::PollutantTrendLineSeries(
     const QString& pollutant,
-    QAbstractItemModel* model
-)
+    QAbstractItemModel* model,
+    QObject *parent
+    ): QLineSeries(parent)
 {
     timeSinceEpochProxyModel = new WaterSampleTableTimeSinceEpochProxy(this);
     timeSinceEpochProxyModel->setSourceModel(model);
@@ -30,8 +31,28 @@ PollutantTrendLineChart::PollutantTrendLineChart(
 {
     legend()->hide();
     setAnimationOptions(QChart::AllAnimations);
-    pollutant_series = new PollutantTrendLineSeries(pollutant, model);
-    addSeries(pollutant_series);
+    pollutant_series = QList<PollutantTrendLineSeries*>();
+    pollutant_series.append(new PollutantTrendLineSeries(pollutant, model, this));
+    addSeries(pollutant_series.first());
+    setAxes();
+}
+
+PollutantTrendLineChart::PollutantTrendLineChart(
+    QList<QString> pollutants,
+    QAbstractItemModel* model,
+    QGraphicsItem *parent
+    ): QChart(parent)
+{
+    legend()->hide();
+    setAnimationOptions(QChart::AllAnimations);
+
+    pollutant_series = QList<PollutantTrendLineSeries*>();
+    for (auto pollutant : pollutants) {
+        auto series = new PollutantTrendLineSeries(pollutant, model, this);
+        addSeries(series);
+        pollutant_series.append(series);
+    }
+
     setAxes();
 }
 
@@ -46,11 +67,14 @@ void PollutantTrendLineChart::setAxes()
     axisX->setFormat("MMM yyyy");
     axisX->setTitleText("Date");
     addAxis(axisX, Qt::AlignBottom);
-    pollutant_series->attachAxis(axisX);
 
     auto axisY = new QValueAxis;
     axisY->setLabelFormat("%.2f");
     axisY->setTitleText("Result");
     addAxis(axisY, Qt::AlignLeft);
-    pollutant_series->attachAxis(axisY);
+
+    for (auto series : pollutant_series) {
+        series->attachAxis(axisX);
+        series->attachAxis(axisY);
+    }
 }

@@ -8,13 +8,14 @@
 #include <QAbstractSeries>
 #include <QAbstractItemModel>
 #include "table_model.hpp"
+#include <QList>
 #include <QVXYModelMapper>
 #include <QSortFilterProxyModel>
 
 class PollutantTrendLineSeries: public QLineSeries
 {
     public:
-        PollutantTrendLineSeries(const QString& pollutant, QAbstractItemModel* model);
+        PollutantTrendLineSeries(const QString& pollutant, QAbstractItemModel* model, QObject *parent = nullptr);
 
     private:
         WaterSampleTableTimeSinceEpochProxy* timeSinceEpochProxyModel;
@@ -26,8 +27,9 @@ class PollutantTrendLineChart: public QChart
 {
     public:
         PollutantTrendLineChart(const QString& pollutant, QAbstractItemModel* model, QGraphicsItem *parent = nullptr);
+        PollutantTrendLineChart(QList<QString> pollutants, QAbstractItemModel* model, QGraphicsItem *parent = nullptr);
         void setAxes();
     
     private:
-        PollutantTrendLineSeries* pollutant_series;
+        QList<PollutantTrendLineSeries*> pollutant_series;
 };
