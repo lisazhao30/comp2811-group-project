@@ -97,8 +97,6 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     QGridLayout* grid = new QGridLayout();
     pageLayout->addLayout(grid);
 
-    // TODO: change `model` to proxy model, requires parameter type change
-
     // add charts and set a min height
     chart1 = new PollutantTrendLineChart("Nitrate-N", customProxyModel);
     chart1->setTitle("Nitrate-N");
@@ -149,7 +147,6 @@ void HomePage::modelUpdated() {
 }
 
 void HomePage::applyLocationFilter(const QString& text) {
-    std::cout << "applying location filter" << std::endl;
     customProxyModel->setFilterKeyColumn(3);  
     customProxyModel->setLocationFilter(text);
 }
