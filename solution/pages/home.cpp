@@ -81,6 +81,15 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
             this, SLOT(dateFilterChanged()));
     connect(toDateEdit, SIGNAL(dateChanged(QDate)),
             this, SLOT(dateFilterChanged()));
+    
+    // table view for testing
+    QTableView* table = new QTableView(this);
+    table->setModel(customProxyModel);
+    table->setMinimumHeight(400);
+    QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+    table->setFont(tableFont);
+
+    addWidget(table);
 
     //QWidget* wrapper = new QWidget();
     //addWidget(wrapper);
@@ -142,7 +151,7 @@ void HomePage::modelUpdated() {
 void HomePage::applyLocationFilter(const QString& text) {
     std::cout << "applying location filter" << std::endl;
     customProxyModel->setFilterKeyColumn(3);  
-    customProxyModel->setFilterRegularExpression(text);
+    customProxyModel->setLocationFilter(text);
 }
 
 void HomePage::dateFilterChanged()

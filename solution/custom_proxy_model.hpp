@@ -12,6 +12,9 @@ public:
 
     void setFilterMinimumDate(const QDate &date);
     void setFilterMaximumDate(const QDate &date);
+    void setAllowedPollutants(const QStringList &pollutants);
+    void setPollutantFilter(const QString &text);
+    void setLocationFilter(const QString &text);
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
@@ -19,6 +22,9 @@ protected:
 private:
     bool dateInRange(const QDate &date) const;
 
+    QRegularExpression pollutantFilterRegex; 
+    QRegularExpression locationFilterRegex;
     QDate minDate;
     QDate maxDate;
+    QStringList allowedPollutants;
 };

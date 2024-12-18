@@ -1,5 +1,11 @@
 #include <QCompleter>
 #include "pollutant_overview.hpp"
+/*
+Pollutants: 
+Heavy Metals: Examples include Lead (Pb), Mercury (Hg), Cadmium (Cd), and Chromium (Cr).
+Nutrients: Examples include Nitrate (NO3-) and Phosphate (PO4³-).
+Volatile Organic Compounds (VOCs): Examples like Chloroform or 1,1,2-Trichloroethane.
+*/
 
 PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
     // header text
@@ -30,9 +36,6 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
 
     addHorizontalLayout(heroDescription, gifLabel, 20);
 
-    // add search functionality for pollutant
-    filterInput = new QLineEdit();
-
     // Inline autocomplete on search
     QCompleter* completer = new QCompleter(this);
     completer->setModel(model);
@@ -41,27 +44,45 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     completer->setCompletionRole(Qt::DisplayRole);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
 
-    filterInput->setCompleter(completer);
-    filterInput->setPlaceholderText("Search for pollutant");
-    connect(filterInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
-    addWidget(filterInput);
+    filterPollutantInput = new QLineEdit();
+    filterPollutantInput->setPlaceholderText("Search for pollutant");
+    connect(filterPollutantInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
+    addWidget(filterPollutantInput);
 
     // create filter proxy model
-    filterProxyModel = new QSortFilterProxyModel(this);
-    filterProxyModel->setSourceModel(model);
-    filterProxyModel->setFilterKeyColumn(5); // filter for pollutant label only
-    filterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    customProxyModel = new CustomProxyModel(this);
+    customProxyModel->setSourceModel(model);
+    customProxyModel->setDynamicSortFilter(true);
+    // specify pollutants allowed
+    customProxyModel->setAllowedPollutants({"Nitrate-N"});
+    customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-    // add table
+    // add table for testing
     QTableView* table = new QTableView(this);
-    table->setModel(filterProxyModel);
-
+    table->setModel(customProxyModel);
+    table->setMinimumHeight(400);
     QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     table->setFont(tableFont);
 
     addWidget(table);
+
+    // add charts
+    chart = new PollutantTrendLineChart("Nitrate-N", customProxyModel);
+    chart->setTitle("Pollutant Overview");
+    QChartView* chartView = new QChartView(chart);
+    chartView->setMinimumHeight(400);
+    addWidget(chartView);
+}
+
+void PollutantOverviewPage::modelUpdated() {
+    // Refreshes the chart
+    auto series1 = chart->series().at(0);
+    chart->removeSeries(series1);
+    chart->addSeries(series1);
+    chart->setAxes();
 }
 
 void PollutantOverviewPage::applyFilter(const QString& text) {
-    filterProxyModel->setFilterFixedString(text);
+    std::cout << "applying pollutant filter" << std::endl;
+    customProxyModel->setPollutantFilter(text);
 }
