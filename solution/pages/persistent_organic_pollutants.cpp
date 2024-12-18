@@ -52,7 +52,8 @@ PersistentOrganicPollutantsPage::PersistentOrganicPollutantsPage(WaterSampleTabl
     // add charts
     chart = new PollutantTrendLineChart({"PCB Con 028", "PCB Con 101", "PCB Con 118", 
         "PCB Con 153", "PCB Con 180", "PCB 118 DW", "PCB 170 DW"}, customProxyModel);
-    chart->setTitle("PCB Levels vs. Date");
+    chart->setTitle("Persistent Organic Pollutant Levels vs. Date");
+    chart->setVerticalAxisTitle("PCB Units (ug/L)");
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);
