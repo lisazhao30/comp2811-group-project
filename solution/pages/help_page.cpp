@@ -14,6 +14,7 @@ HelpPage::HelpPage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     addSubtitleText(tr("Data Sources"));
     addParagraphText(tr("https://environment.data.gov.uk/water-quality/view/download"));
+    addParagraphText(tr("Project was done in reference to COMP2811 Lecture Slides and Teams Channel"));
 
     // footer credits
     addFooterCredits();

@@ -86,6 +86,13 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     addWidget(table);
 
     // nitrates
+    QHBoxLayout* nitrateIconLayout = createHelpInfoPopup(
+        tr("Nitrate Compliance"),
+        tr("See the compliance of Nitrate-N.\n" 
+            "Any value above 50.0 mg/L is considered unsafe. Yellow indicators are set to 20.0 mg/L.")
+    );
+    pageLayout->addLayout(nitrateIconLayout);
+
     nitrateScatterChart = new PollutantScatterChart("Nitrate-N", customProxyModel, 20.0, 20.0, 50.0, false);
     nitrateScatterChart->setTitle(tr("Compliance of Nitrate-N Overview"));
     nitrateScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (mg/L)"));
@@ -94,6 +101,13 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     addWidget(nitrateScatterChartView);
 
     // phosphates
+    QHBoxLayout* phosphateIconLayout = createHelpInfoPopup(
+        tr("Phosphate Compliance"),
+        tr("See the compliance of phosphates.\n" 
+            "Any value below 0.1 mg/L is considered unsafe. Yellow indicators are set to 0.2 mg/L and above.")
+    );
+    pageLayout->addLayout(phosphateIconLayout);
+
     phosphateScatterChart = new PollutantScatterChart("Phosphate", customProxyModel, 0.4, 0.2, 0.1, true);
     phosphateScatterChart->setTitle(tr("Compliance of Phosphate Overview"));
     phosphateScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (mg/L)"));
@@ -102,6 +116,13 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     addWidget(phosphateScatterChartView);
 
     // PCBs
+    QHBoxLayout* pcbsIconLayout = createHelpInfoPopup(
+        tr("PCBs Compliance"),
+        tr("See the compliance of PCBs.\n" 
+            "Any value above 0.5 µg/L is considered unsafe. Yellow indicators are set to 0.3 µg/L and above.")
+    );
+    pageLayout->addLayout(pcbsIconLayout);
+
     pcbsScatterChart = new PollutantScatterChart("PCB Con 028", customProxyModel, 0.0, 0.3, 0.5, false);
     pcbsScatterChart->setTitle(tr("Compliance of PCBs Overview"));
     pcbsScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (µg/L)"));
@@ -110,9 +131,16 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     addWidget(pcbsScatterChartView);
 
     // fluorinated compounds
+    QHBoxLayout* fluorinatedIconLayout = createHelpInfoPopup(
+        tr("Fluorinated Compounds Compliance"),
+        tr("See the compliance of fluorinated compounds.\n" 
+            "Any value above 0.1 µg/L is considered unsafe. Yellow indicators are set to 0.5 µg/L and above.")
+    );
+    pageLayout->addLayout(fluorinatedIconLayout);
+
     fluorinatedScatterChart = new PollutantScatterChart("PFODA", customProxyModel, 0, 0.05, 0.1, true);
     fluorinatedScatterChart->setTitle(tr("Compliance of Fluorinated Compounds Overview"));
-    fluorinatedScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (ng/L)"));
+    fluorinatedScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (µg/L)"));
     QChartView* fluorinatedScatterChartView = new QChartView(fluorinatedScatterChart);
     fluorinatedScatterChartView->setMinimumHeight(400);
     addWidget(fluorinatedScatterChartView);
