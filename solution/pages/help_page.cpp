@@ -13,6 +13,7 @@ HelpPage::HelpPage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     addParagraphText(tr("https://theriverstrust.org/key-issues/water-quality"));
 
     addSubtitleText(tr("Data Sources"));
+    addParagraphText(tr("https://environment.data.gov.uk/water-quality/view/download"));
 
     // footer credits
     addFooterCredits();

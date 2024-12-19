@@ -18,6 +18,7 @@ DataPage::DataPage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     // add table
     QTableView* table = new QTableView(this);
     table->setModel(filterProxyModel);
+    table->setMinimumHeight(600);
 
     QFont tableFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     table->setFont(tableFont);
