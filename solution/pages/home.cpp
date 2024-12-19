@@ -15,7 +15,7 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     // add hero description
     QLabel* subHeaderText = addHeader2Text(tr("Welcome to AquaTrack"));
-    QLabel* paragraphText = addParagraphText(tr("AquaTrack is designed to help you explore\n"
+    QLabel* paragraphText = addSubtitleText(tr("AquaTrack is designed to help you explore\n"
                                              "water pollutant levels, safety compliance,\n"
                                              "and geographic trends across the UK and EU.\n"
                                              "Easily navigate by location and time to gain\n"
@@ -50,6 +50,15 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     // location filter
     filterLocationInput = new QLineEdit();
     filterLocationInput->setPlaceholderText(tr("Search for location"));
+
+    // location help
+    QHBoxLayout* locationIconLayout = createHelpInfoPopup(
+        tr("Search by Location:"),
+        tr("Enter a location to filter the data by geographic area.\n" 
+            "Available locations are under the column 'sample.samplingPoint.label'.")
+    );
+    pageLayout->addLayout(locationIconLayout);
+
     connect(filterLocationInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyLocationFilter(const QString&)));
     addWidget(filterLocationInput);
 
@@ -59,7 +68,7 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     customProxyModel->setDynamicSortFilter(true);
     customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-    // date range labels
+    // date range filter
     fromDateEdit = new QDateEdit;
     fromDateEdit->setDate(QDate(2024, 01, 01));
     fromLabel = new QLabel(tr("&From:"));
@@ -91,9 +100,6 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     addWidget(table);
 
-    //QWidget* wrapper = new QWidget();
-    //addWidget(wrapper);
-
     QGridLayout* grid = new QGridLayout();
     pageLayout->addLayout(grid);
 
@@ -121,6 +127,9 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     QChartView* chartView4 = new QChartView(chart4);
     chartView4->setMinimumHeight(400);
     grid->addWidget(chartView4, 1, 1);
+
+    // footer credits
+    addFooterCredits();
 }
 
 void HomePage::modelUpdated() {

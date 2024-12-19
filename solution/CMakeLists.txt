@@ -27,6 +27,7 @@ qt_add_executable(watersampletool
     pages/home.cpp
     pages/persistent_organic_pollutants.cpp
     pages/pollutant_overview.cpp
+    pages/help_page.cpp
 
 )
 

@@ -8,7 +8,7 @@ PersistentOrganicPollutantsPage::PersistentOrganicPollutantsPage(WaterSampleTabl
     addHeader2Text(tr("Persistent Organic Pollutants:\nTracking Trends, Risks, and Compliance"));
 
     // hero description
-    QLabel* heroDescription = addParagraphText(tr("This page displays data on pollutants like PCBs and their\n"
+    QLabel* heroDescription = addSubtitleText(tr("This page displays data on pollutants like PCBs and their\n"
                                                "environmental and health impacts. View trends over time\n"
                                                "through line charts and access additional details on health\n"
                                                "risks and safety levels with rollover pop-ups. Colour-coded\n"
@@ -57,6 +57,9 @@ PersistentOrganicPollutantsPage::PersistentOrganicPollutantsPage(WaterSampleTabl
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);
+
+    // footer credits
+    addFooterCredits();
 }
 
 void PersistentOrganicPollutantsPage::modelUpdated() {

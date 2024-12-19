@@ -10,7 +10,7 @@ FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model,
     addHeader2Text(tr("Fluorinated Compounds:\nMonitoring PFAS Levels and Environmental Impact"));
 
     // hero description
-    QLabel* heroDescription = addParagraphText(tr("View data on PFAS and other fluorinated pollutants, and\n"
+    QLabel* heroDescription = addSubtitleText(tr("View data on PFAS and other fluorinated pollutants, and\n"
                                                "learn about their distribution and persistence in the\n"
                                                "environment. View maps or time-series charts with colour-\n"
                                                "coded markers to track levels and assess compliance with\n"
@@ -62,6 +62,9 @@ FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model,
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);
+
+    // footer credits
+    addFooterCredits();
 }
 
 void FluorinatedCompoundsPage::modelUpdated() {

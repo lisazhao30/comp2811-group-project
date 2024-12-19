@@ -119,7 +119,8 @@ void WaterSampleWindow::createPages()
     addPage(new EnvironmentalLitterIndicatorsPage(&model), tr("Environmental Litter Indicators"));
     addPage(new FluorinatedCompoundsPage(&model), tr("Fluorinated Compounds"));
     addPage(new ComplianceDashboardPage(&model), tr("Compliance Dashboard"));
-    addPage(new DataPage(&model), tr("Data Page"));
+    addPage(new DataPage(&model), tr("Data"));
+    addPage(new HelpPage(&model), tr("Help"));
 }
 
 void WaterSampleWindow::openDb()

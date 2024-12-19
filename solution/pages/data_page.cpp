@@ -23,6 +23,9 @@ DataPage::DataPage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     table->setFont(tableFont);
 
     addWidget(table);
+
+    // footer credits
+    addFooterCredits();
 }
 
 void DataPage::applyFilter(const QString& text) {

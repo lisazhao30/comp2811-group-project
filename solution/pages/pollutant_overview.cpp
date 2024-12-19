@@ -12,7 +12,7 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     addHeader2Text(tr("Pollutant Insights: Trends, Compliance, and Safety at a Glance"));
     
     // hero description
-    QLabel* heroDescription = addParagraphText(tr("Explore detailed information about water pollutants,\n"
+    QLabel* heroDescription = addSubtitleText(tr("Explore detailed information about water pollutants,\n"
                                                "including trends over time, compliance with safety\n"
                                                "standards, and associated risks. Use the search bar to find\n"
                                                "specific pollutants, view interactive charts, and understand\n"
@@ -44,8 +44,16 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     completer->setCompletionRole(Qt::DisplayRole);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
 
+    // pollutant filter
     filterPollutantInput = new QLineEdit();
     filterPollutantInput->setPlaceholderText(tr("Search for pollutant"));
+    // add help information
+    QHBoxLayout* pollutantIconLayout = createHelpInfoPopup(
+        tr("Search by Pollutant:"),
+        tr("Filter by pollutant.\n" 
+            "Available pollutants are under the column 'determinand.label'.")
+    );
+    pageLayout->addLayout(pollutantIconLayout);
     connect(filterPollutantInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
     addWidget(filterPollutantInput);
 
@@ -75,6 +83,9 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);
+
+    // footer credits
+    addFooterCredits();
 }
 
 void PollutantOverviewPage::modelUpdated() {

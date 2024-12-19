@@ -23,6 +23,7 @@
 #include "pages/fluorinated_compounds.hpp"
 #include "pages/compliance_dashboard.hpp"
 #include "pages/data_page.hpp"
+#include "pages/help_page.hpp"
 
 class QString;
 class QComboBox;

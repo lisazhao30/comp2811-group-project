@@ -14,7 +14,7 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     addHeader2Text(tr("Compliance Dashboard:\nTracking Safety Standards Across Pollutants"));
 
     // hero description
-    QLabel* heroDescription = addParagraphText(tr("The Compliance Dashboard provides an overview of\n"
+    QLabel* heroDescription = addSubtitleText(tr("The Compliance Dashboard provides an overview of\n"
                                                "pollutant compliance with safety standards. Use summary\n"
                                                "cards for quick status checks, apply filters to focus on specific\n"
                                                "locations or pollutants, and access pop-up details for non-\n"
@@ -47,12 +47,24 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     // completer->setCaseSensitivity(Qt::CaseInsensitive);
 
     // pollutant filter
+    QHBoxLayout* pollutantIconLayout = createHelpInfoPopup(
+        tr("Search by Pollutant:"),
+        tr("Filter by pollutant.\n" 
+            "Available pollutants are under the column 'determinand.label'.")
+    );
+    pageLayout->addLayout(pollutantIconLayout);
     filterPollutantInput = new QLineEdit();
     filterPollutantInput->setPlaceholderText(tr("Search for pollutant"));
     connect(filterPollutantInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
     addWidget(filterPollutantInput);
 
     // location filter
+    QHBoxLayout* locationIconLayout = createHelpInfoPopup(
+        tr("Search by Location:"),
+        tr("Enter a location to filter the data by geographic area.\n" 
+            "Available locations are under the column 'sample.samplingPoint.label'.")
+    );
+    pageLayout->addLayout(locationIconLayout);
     filterLocationInput = new QLineEdit();
     filterLocationInput->setPlaceholderText(tr("Search for location"));
     connect(filterLocationInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyLocationFilter(const QString&)));
@@ -81,6 +93,9 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     QChartView* scatterChartView = new QChartView(scatterChart);
     scatterChartView->setMinimumHeight(400);
     addWidget(scatterChartView);
+
+    // footer credits
+    addFooterCredits();
 }
 
 void ComplianceDashboardPage::modelUpdated() {

@@ -10,15 +10,16 @@ Page::Page(WaterSampleTableModel* model, QWidget* parent): QWidget(parent)
     // create a scrollable page to view all content
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidget(contentWidget);
-    scrollArea->setWidgetResizable(true); // Ensures resizing works correctly
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); // Optional
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);   // Optional
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); 
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded); 
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(scrollArea);
     setLayout(mainLayout);
 }
 
+// reusable font components
 void Page::addHeaderText(const QString& text)
 {
     QFont font("Satoshi", 60, QFont::Bold);
@@ -34,12 +35,30 @@ QLabel* Page::addHeader2Text(const QString& text)
     return header;
 }
 
-QLabel* Page::addParagraphText(const QString& text)
+QLabel* Page::addSubtitleText(const QString& text)
 {
     QFont font("Satoshi", 30, QFont::Medium);
-    QLabel* paragraph = createLabel(text, font, "color: black;");
+    QLabel* subtitle = createLabel(text, font, "color: black;");
+    pageLayout->addWidget(subtitle);
+    return subtitle;
+}
+
+QLabel* Page::addParagraphText(const QString& text)
+{
+    QFont font("Satoshi", 16);
+    QLabel* paragraph = createLabel(text, font, "color: black");
     pageLayout->addWidget(paragraph);
     return paragraph;
+}
+
+QLabel* Page::addFooterCredits()
+{
+    QFont font("Satoshi", 12);
+    QLabel* credits = createLabel("Made with ❤️ by University of Leeds Students", font, "color: black");
+    credits->setAlignment(Qt::AlignCenter); 
+    // place at bottom of page
+    pageLayout->addWidget(credits, 0, Qt::AlignCenter);
+    return credits;
 }
 
 void Page::addWidget(QWidget* widget)
@@ -65,6 +84,38 @@ QLabel* Page::createLabel(const QString& text, const QFont& font, const QString&
     return label;
 }
 
+QHBoxLayout* Page::createHelpInfoPopup(const QString& labelText, const QString& popupText)
+{
+    QLabel* label = new QLabel(labelText, this);
+    label->setStyleSheet("color: black;");
+
+    QPushButton* infoIcon = new QPushButton(this);
+    infoIcon->setIcon(QIcon(QCoreApplication::applicationDirPath() + "/statics/question.png"));
+    infoIcon->setFixedSize(20, 20); 
+    infoIcon->setStyleSheet("border: none;"); 
+    infoIcon->setToolTip("Click for more information");
+
+    connect(infoIcon, &QPushButton::clicked, this, [this, popupText]() {
+        showPopup(popupText);
+    });
+    
+    // place icon and text label beside one another
+    QHBoxLayout* layout = new QHBoxLayout;
+    layout->addWidget(label);
+    layout->addWidget(infoIcon);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(5);
+    layout->setAlignment(Qt::AlignLeft);
+
+    return layout;
+}
+
 void Page::modelUpdated() {
     // Do nothing
+}
+
+// slot to show popup
+void Page::showPopup(const QString& text)
+{
+    QMessageBox::information(this, tr("Information"), text);
 }

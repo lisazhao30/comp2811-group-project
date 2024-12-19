@@ -7,7 +7,7 @@ EnvironmentalLitterIndicatorsPage::EnvironmentalLitterIndicatorsPage(WaterSample
     addHeader2Text(tr("Environmental Litter Indicators:\nTracking Trends, Risks, and Compliance"));
 
     // hero description
-    QLabel* heroDescription = addParagraphText(tr("The Environmental Litter Indicators Page provides an\n"
+    QLabel* heroDescription = addSubtitleText(tr("The Environmental Litter Indicators Page provides an\n"
                                                "overview of visible pollutants like plastic litter in water.\n"
                                                "Compare litter levels across locations and water body types\n"
                                                "using the charts, and check compliance with EU Bathing\n"
@@ -34,12 +34,24 @@ EnvironmentalLitterIndicatorsPage::EnvironmentalLitterIndicatorsPage(WaterSample
     // location filter
     filterLocationInput = new QLineEdit();
     filterLocationInput->setPlaceholderText(tr("Search for location"));
+    QHBoxLayout* locationIconLayout = createHelpInfoPopup(
+        tr("Search by Location:"),
+        tr("Enter a location to filter the data by geographic area.\n" 
+            "Available locations are under the column 'sample.samplingPoint.label'.")
+    );
+    pageLayout->addLayout(locationIconLayout);
     connect(filterLocationInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyLocationFilter(const QString&)));
     addWidget(filterLocationInput);
 
-    // water body type filter
     filterWaterBodyTypeInput = new QLineEdit();
     filterWaterBodyTypeInput->setPlaceholderText(tr("Search for water body type"));
+    // water body type filter
+    QHBoxLayout* waterBodyTypeIconLayout = createHelpInfoPopup(
+        tr("Search by Water Body Type:"),
+        tr("Filter the data by water body types.\n" 
+            "Available water bodies are under the column 'sample.sampledMaterialType.label'.")
+    );
+    pageLayout->addLayout(waterBodyTypeIconLayout);
     connect(filterWaterBodyTypeInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyWaterBodyTypeFilter(const QString&)));
     addWidget(filterWaterBodyTypeInput);
 
@@ -69,6 +81,9 @@ EnvironmentalLitterIndicatorsPage::EnvironmentalLitterIndicatorsPage(WaterSample
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);
+
+    // footer credits
+    addFooterCredits();
 }
 
 void EnvironmentalLitterIndicatorsPage::applyLocationFilter(const QString& text) {
