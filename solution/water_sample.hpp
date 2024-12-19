@@ -5,32 +5,32 @@
 #include <iostream>
 
 enum ResultQualifierNotation {
-  Empty,
-  LessThan,
-  GreaterThan
+    Empty,
+    LessThan,
+    GreaterThan
 };
 
 class WaterSample
 {
-  public:
+public:
     WaterSample(
-      const QString&,
-      const QString&,
-      const QString&,
-      const QString&,
-      const QString&,
-      const QString&,
-      const QString&,
-      int,
-      ResultQualifierNotation,
-      double,
-      const QString&,
-      const QString&,
-      bool,
-      const QString&,
-      int,
-      int
-    );
+        const QString&,
+        const QString&,
+        const QString&,
+        const QString&,
+        const QString&,
+        const QString&,
+        const QString&,
+        int,
+        ResultQualifierNotation,
+        double,
+        const QString&,
+        const QString&,
+        bool,
+        const QString&,
+        int,
+        int
+        );
 
     QString get_id() const { return id; }
     QString get_sampling_point() const { return sampling_point; }
@@ -38,7 +38,7 @@ class WaterSample
     QString get_sampling_point_label() const { return sampling_point_label; }
     QDateTime get_sample_date_time() const { return sample_date_time; }
     QString get_sample_date_time_string() const {
-      return sample_date_time.toString();
+        return sample_date_time.toString();
     }
     QString get_determinand_label() const { return determinand_label; }
     QString get_determinand_definition() const { return determinand_definition; }
@@ -52,7 +52,7 @@ class WaterSample
     int get_sampling_point_easting() const { return sampling_point_easting; }
     int get_sampling_point_northing() const { return sampling_point_northing; }
 
-  private:
+private:
     QString id;
     QString sampling_point;
     QString sampling_point_notation;

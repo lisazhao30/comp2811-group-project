@@ -9,17 +9,17 @@ class WaterDataset: public QObject
 {
     Q_OBJECT
 
-  public:
+public:
     WaterDataset() {}
     WaterDataset(const QString& filename) { loadData(filename); }
     void loadData(const QString&);
     int size() const { return data.size(); }
     WaterSample operator[](int index) const { return data.at(index); }
 
-  private:
+private:
     std::vector<WaterSample> data;
     void checkDataExists() const;
 
-  signals:
+signals:
     void updateLoadingProgress(int percent);
 };

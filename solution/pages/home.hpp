@@ -18,26 +18,26 @@
 class HomePage: public Page {
     Q_OBJECT
 
-    public:
-        HomePage(WaterSampleTableModel* model, QWidget* parent = nullptr);
-        QLabel *fromLabel;
-        QLabel *toLabel;
-        QLineEdit *filterPatternLineEdit;
-        QDateEdit *fromDateEdit;
-        QDateEdit *toDateEdit;
-        CustomProxyModel* customProxyModel;
+public:
+    HomePage(WaterSampleTableModel* model, QWidget* parent = nullptr);
+    QLabel *fromLabel;
+    QLabel *toLabel;
+    QLineEdit *filterPatternLineEdit;
+    QDateEdit *fromDateEdit;
+    QDateEdit *toDateEdit;
+    CustomProxyModel* customProxyModel;
     
-    public slots:
-        void modelUpdated();
+public slots:
+    void modelUpdated();
 
-    private:
-        QLineEdit* filterLocationInput;
-        PollutantTrendLineChart* chart1;
-        PollutantTrendLineChart* chart2;
-        PollutantTrendLineChart* chart3;
-        PollutantTrendLineChart* chart4;
+private:
+    QLineEdit* filterLocationInput;
+    PollutantTrendLineChart* chart1;
+    PollutantTrendLineChart* chart2;
+    PollutantTrendLineChart* chart3;
+    PollutantTrendLineChart* chart4;
     
-    private slots:
-        void applyLocationFilter(const QString& text);
-        void dateFilterChanged();
+private slots:
+    void applyLocationFilter(const QString& text);
+    void dateFilterChanged();
 };

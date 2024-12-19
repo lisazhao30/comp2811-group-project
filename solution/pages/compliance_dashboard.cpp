@@ -11,14 +11,14 @@ These standards can be derived from public resources like the UK Drinking Water 
 */
 
 ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
-    addHeader2Text("Compliance Dashboard:\nTracking Safety Standards Across Pollutants");
+    addHeader2Text(tr("Compliance Dashboard:\nTracking Safety Standards Across Pollutants"));
 
     // hero description
-    QLabel* heroDescription = addParagraphText("The Compliance Dashboard provides an overview of\n"
-        "pollutant compliance with safety standards. Use summary\n"
-        "cards for quick status checks, apply filters to focus on specific\n"
-        "locations or pollutants, and access pop-up details for non-\n"
-        "compliant areas to understand trends and potential causes.");
+    QLabel* heroDescription = addParagraphText(tr("The Compliance Dashboard provides an overview of\n"
+                                               "pollutant compliance with safety standards. Use summary\n"
+                                               "cards for quick status checks, apply filters to focus on specific\n"
+                                               "locations or pollutants, and access pop-up details for non-\n"
+                                               "compliant areas to understand trends and potential causes."));
 
     // animation
     QLabel* gifLabel = new QLabel(this);
@@ -48,13 +48,13 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
 
     // pollutant filter
     filterPollutantInput = new QLineEdit();
-    filterPollutantInput->setPlaceholderText("Search for pollutant");
+    filterPollutantInput->setPlaceholderText(tr("Search for pollutant"));
     connect(filterPollutantInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
     addWidget(filterPollutantInput);
 
     // location filter
     filterLocationInput = new QLineEdit();
-    filterLocationInput->setPlaceholderText("Search for location");
+    filterLocationInput->setPlaceholderText(tr("Search for location"));
     connect(filterLocationInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyLocationFilter(const QString&)));
     addWidget(filterLocationInput);
 
@@ -77,7 +77,7 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
 
     // chart isn't refreshing???
     scatterChart = new PollutantScatterChart("Nitrate-N", customProxyModel);
-    scatterChart->setTitle("Compliance Overview");
+    scatterChart->setTitle(tr("Compliance Overview"));
     QChartView* scatterChartView = new QChartView(scatterChart);
     scatterChartView->setMinimumHeight(400);
     addWidget(scatterChartView);
@@ -92,12 +92,10 @@ void ComplianceDashboardPage::modelUpdated() {
 }
 
 void ComplianceDashboardPage::applyFilter(const QString& text) {
-    std::cout << "applying pollutant filter" << std::endl;
     customProxyModel->setPollutantFilter(text);
 }
 
 void ComplianceDashboardPage::applyLocationFilter(const QString& text) {
-    std::cout << "applying location filter" << std::endl;
     customProxyModel->setFilterKeyColumn(3);  
     customProxyModel->setLocationFilter(text);
 }

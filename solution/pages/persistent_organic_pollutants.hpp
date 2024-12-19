@@ -19,13 +19,13 @@
 class PersistentOrganicPollutantsPage: public Page {
     Q_OBJECT // Q_OBJECT required for signals
 
-    public:
-        PersistentOrganicPollutantsPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
-   
-    public slots:
-        void modelUpdated();
+public:
+    PersistentOrganicPollutantsPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
 
-    private:
-        CustomProxyModel* customProxyModel;
-        PollutantTrendLineChart* chart;
+public slots:
+    void modelUpdated();
+
+private:
+    CustomProxyModel* customProxyModel;
+    PollutantTrendLineChart* chart;
 };

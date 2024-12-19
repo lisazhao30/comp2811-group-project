@@ -1,11 +1,11 @@
 #include "data_page.hpp"
 
 DataPage::DataPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
-    addHeader2Text("Data Page");
+    addHeader2Text(tr("Data Page"));
 
     // add filter input
     filterInput = new QLineEdit();
-    filterInput->setPlaceholderText("Filter...");
+    filterInput->setPlaceholderText(tr("Filter..."));
     connect(filterInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
     addWidget(filterInput);
 

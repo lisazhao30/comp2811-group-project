@@ -6,20 +6,20 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     pageLayout->setSpacing(0);
 
     // header components
-    addHeaderText("Spot the Trends, Shape the Future:\n"
-        "Water Quality Insights at Your Fingertips");
+    addHeaderText(tr("Spot the Trends, Shape the Future:\n"
+                  "Water Quality Insights at Your Fingertips"));
 
     // create horizontal layout for hero description
     QHBoxLayout* horizontalLayout = new QHBoxLayout;
     QVBoxLayout* verticalLayout = new QVBoxLayout;
-   
+
     // add hero description
-    QLabel* subHeaderText = addHeader2Text("Welcome to AquaTrack");
-    QLabel* paragraphText = addParagraphText("AquaTrack is designed to help you explore\n"
-        "water pollutant levels, safety compliance,\n"
-        "and geographic trends across the UK and EU.\n"
-        "Easily navigate by location and time to gain\n"
-        "insights into various environmental factors.");
+    QLabel* subHeaderText = addHeader2Text(tr("Welcome to AquaTrack"));
+    QLabel* paragraphText = addParagraphText(tr("AquaTrack is designed to help you explore\n"
+                                             "water pollutant levels, safety compliance,\n"
+                                             "and geographic trends across the UK and EU.\n"
+                                             "Easily navigate by location and time to gain\n"
+                                             "insights into various environmental factors."));
     
     verticalLayout->addWidget(subHeaderText);
     verticalLayout->addWidget(paragraphText);
@@ -45,11 +45,11 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     pageLayout->addLayout(horizontalLayout);
 
-    addHeaderText("Pollutant Overview");
+    addHeaderText(tr("Pollutant Overview"));
 
     // location filter
     filterLocationInput = new QLineEdit();
-    filterLocationInput->setPlaceholderText("Search for location");
+    filterLocationInput->setPlaceholderText(tr("Search for location"));
     connect(filterLocationInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyLocationFilter(const QString&)));
     addWidget(filterLocationInput);
 
@@ -99,25 +99,25 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
 
     // add charts and set a min height
     chart1 = new PollutantTrendLineChart("Nitrate-N", customProxyModel);
-    chart1->setTitle("Nitrate-N");
+    chart1->setTitle(tr("Nitrate-N"));
     QChartView* chartView1 = new QChartView(chart1);
     chartView1->setMinimumHeight(400);
     grid->addWidget(chartView1, 0, 0);
 
     chart2 = new PollutantTrendLineChart("O Diss %sat", customProxyModel);
-    chart2->setTitle("Dissolved Oxygen Saturation %");
+    chart2->setTitle(tr("Dissolved Oxygen Saturation %"));
     QChartView* chartView2 = new QChartView(chart2);
     chartView2->setMinimumHeight(400);
     grid->addWidget(chartView2, 0, 1);
 
     chart3 = new PollutantTrendLineChart("pH", customProxyModel);
-    chart3->setTitle("pH");
+    chart3->setTitle(tr("pH"));
     QChartView* chartView3 = new QChartView(chart3);
     chartView3->setMinimumHeight(400);
     grid->addWidget(chartView3, 1, 0);
 
     chart4 = new PollutantTrendLineChart("Temp Water", customProxyModel);
-    chart4->setTitle("Water Temperature");
+    chart4->setTitle(tr("Water Temperature"));
     QChartView* chartView4 = new QChartView(chart4);
     chartView4->setMinimumHeight(400);
     grid->addWidget(chartView4, 1, 1);
@@ -152,7 +152,7 @@ void HomePage::applyLocationFilter(const QString& text) {
 }
 
 void HomePage::dateFilterChanged()
- {
+{
     customProxyModel->setFilterMinimumDate(fromDateEdit->date());
     customProxyModel->setFilterMaximumDate(toDateEdit->date());
 
@@ -160,4 +160,4 @@ void HomePage::dateFilterChanged()
     chart2->setAxes();
     chart3->setAxes();
     chart4->setAxes();
- }
+}

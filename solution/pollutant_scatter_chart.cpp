@@ -4,7 +4,7 @@
 PollutantScatterSeries::PollutantScatterSeries(
     const QString& pollutant,
     QAbstractItemModel* model
-)
+    )
 {
     timeSinceEpochProxyModel = new WaterSampleTableTimeSinceEpochProxy(this);
     timeSinceEpochProxyModel->setSourceModel(model);
@@ -52,10 +52,9 @@ PollutantScatterSeries::PollutantScatterSeries(
                 pointColor = QColor("red");  // Non-compliant
             }
 
-            int pointIndex = scatterSeries->count() - 1;
             scatterSeries->setBrush(pointColor);  
         } else {
-            qDebug() << "Invalid date or result data at row:" << row;
+            // qDebug() << "Invalid date or result data at row:" << row;
         }
     }
 
@@ -66,7 +65,7 @@ PollutantScatterChart::PollutantScatterChart(
     const QString& pollutant,
     QAbstractItemModel* model,
     QGraphicsItem *parent
-): QChart(parent)
+    ): QChart(parent)
 {
     legend()->hide();
     setAnimationOptions(QChart::AllAnimations);
@@ -84,7 +83,7 @@ void PollutantScatterChart::setAxes()
     auto axisX = new QDateTimeAxis;
     axisX->setTickCount(10);
     axisX->setFormat("MMM yyyy");
-    axisX->setTitleText("Date");
+    axisX->setTitleText(tr("Date"));
 
     QDateTime minDate = QDateTime::fromMSecsSinceEpoch(pollutant_series->getScatterSeries()->at(0).x());
     QDateTime maxDate = QDateTime::fromMSecsSinceEpoch(pollutant_series->getScatterSeries()->at(0).x());
@@ -105,7 +104,7 @@ void PollutantScatterChart::setAxes()
 
     auto axisY = new QValueAxis;
     axisY->setLabelFormat("%.2f");
-    axisY->setTitleText("Result");
+    axisY->setTitleText(tr("Result"));
 
     double minY = pollutant_series->getScatterSeries()->at(0).y();
     double maxY = pollutant_series->getScatterSeries()->at(0).y();

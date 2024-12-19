@@ -18,18 +18,18 @@
 class PollutantOverviewPage: public Page {
     Q_OBJECT // Q_OBJECT required for signals
 
-    public:
-        PollutantOverviewPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
+public:
+    PollutantOverviewPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
 
-    public slots:
-        void modelUpdated();
+public slots:
+    void modelUpdated();
 
-    private:
-        QLineEdit* filterPollutantInput;
-        QSortFilterProxyModel* filterProxyModel;
-        CustomProxyModel* customProxyModel;
-        PollutantTrendLineChart* chart;
+private:
+    QLineEdit* filterPollutantInput;
+    QSortFilterProxyModel* filterProxyModel;
+    CustomProxyModel* customProxyModel;
+    PollutantTrendLineChart* chart;
 
-    private slots:
-        void applyFilter(const QString& text);
+private slots:
+    void applyFilter(const QString& text);
 };

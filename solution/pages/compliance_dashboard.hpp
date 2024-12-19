@@ -19,20 +19,20 @@
 class ComplianceDashboardPage: public Page {
     Q_OBJECT // Q_OBJECT required for signals
 
-    public:
-        ComplianceDashboardPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
+public:
+    ComplianceDashboardPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
     
-    public slots:
-        void modelUpdated();
+public slots:
+    void modelUpdated();
 
-    private:
-        QLineEdit* filterPollutantInput;
-        QLineEdit* filterLocationInput;
-        QSortFilterProxyModel* filterProxyModel;
-        CustomProxyModel* customProxyModel;
-        PollutantScatterChart* scatterChart;
+private:
+    QLineEdit* filterPollutantInput;
+    QLineEdit* filterLocationInput;
+    QSortFilterProxyModel* filterProxyModel;
+    CustomProxyModel* customProxyModel;
+    PollutantScatterChart* scatterChart;
 
-    private slots:
-        void applyFilter(const QString& text);
-        void applyLocationFilter(const QString& text);
+private slots:
+    void applyFilter(const QString& text);
+    void applyLocationFilter(const QString& text);
 };

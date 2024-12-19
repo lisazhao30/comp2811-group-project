@@ -17,34 +17,34 @@
 
 class PollutantScatterSeries: public QLineSeries
 {
-    public:
-        PollutantScatterSeries(const QString& pollutant, QAbstractItemModel* model);
+public:
+    PollutantScatterSeries(const QString& pollutant, QAbstractItemModel* model);
 
-        void updateComplianceColors();
-        QScatterSeries* getScatterSeries() const {
-            return scatterSeries;
-        }
+    void updateComplianceColors();
+    QScatterSeries* getScatterSeries() const {
+        return scatterSeries;
+    }
 
-    private:
-        WaterSampleTableTimeSinceEpochProxy* timeSinceEpochProxyModel;
-        QSortFilterProxyModel* filterProxyModel;
-        QScatterSeries *scatterSeries; 
+private:
+    WaterSampleTableTimeSinceEpochProxy* timeSinceEpochProxyModel;
+    QSortFilterProxyModel* filterProxyModel;
+    QScatterSeries *scatterSeries;
 };
 
 class PollutantScatterChart : public QChart
 {
     Q_OBJECT
 
-    public:
-        PollutantScatterChart(
-            const QString &pollutant,              
-            QAbstractItemModel *model, 
-            QGraphicsItem *parent = nullptr           
+public:
+    PollutantScatterChart(
+        const QString &pollutant,
+        QAbstractItemModel *model,
+        QGraphicsItem *parent = nullptr
         );
 
-        void setAxes();
+    void setAxes();
 
-    private:
-        PollutantScatterSeries* pollutant_series; 
+private:
+    PollutantScatterSeries* pollutant_series;
 };
 

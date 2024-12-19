@@ -18,19 +18,19 @@
 class EnvironmentalLitterIndicatorsPage: public Page {
     Q_OBJECT
 
-    public:
-        EnvironmentalLitterIndicatorsPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
+public:
+    EnvironmentalLitterIndicatorsPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
     
-    public slots:
-        void modelUpdated();
+public slots:
+    void modelUpdated();
     
-    private:
-        QLineEdit* filterLocationInput;
-        QLineEdit* filterWaterBodyTypeInput;
-        CustomProxyModel* customProxyModel;
-        PollutantTrendLineChart* chart;
+private:
+    QLineEdit* filterLocationInput;
+    QLineEdit* filterWaterBodyTypeInput;
+    CustomProxyModel* customProxyModel;
+    PollutantTrendLineChart* chart;
 
-    private slots:
-        void applyLocationFilter(const QString& text);
-        void applyWaterBodyTypeFilter(const QString& text);
+private slots:
+    void applyLocationFilter(const QString& text);
+    void applyWaterBodyTypeFilter(const QString& text);
 };

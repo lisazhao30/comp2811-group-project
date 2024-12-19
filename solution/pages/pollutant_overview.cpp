@@ -9,15 +9,15 @@ Volatile Organic Compounds (VOCs): Examples like Chloroform or 1,1,2-Trichloroet
 
 PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
     // header text
-    addHeader2Text("Pollutant Insights: Trends, Compliance, and Safety at a Glance");
+    addHeader2Text(tr("Pollutant Insights: Trends, Compliance, and Safety at a Glance"));
     
     // hero description
-    QLabel* heroDescription = addParagraphText("Explore detailed information about water pollutants,\n"
-        "including trends over time, compliance with safety\n"
-        "standards, and associated risks. Use the search bar to find\n"
-        "specific pollutants, view interactive charts, and understand\n"
-        "safety levels with clear colour-coded indicators. Hover or\n"
-        "click for more insights into risks and thresholds.");
+    QLabel* heroDescription = addParagraphText(tr("Explore detailed information about water pollutants,\n"
+                                               "including trends over time, compliance with safety\n"
+                                               "standards, and associated risks. Use the search bar to find\n"
+                                               "specific pollutants, view interactive charts, and understand\n"
+                                               "safety levels with clear colour-coded indicators. Hover or\n"
+                                               "click for more insights into risks and thresholds."));
 
     // animation
     QLabel* gifLabel = new QLabel(this);
@@ -45,7 +45,7 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     completer->setCaseSensitivity(Qt::CaseInsensitive);
 
     filterPollutantInput = new QLineEdit();
-    filterPollutantInput->setPlaceholderText("Search for pollutant");
+    filterPollutantInput->setPlaceholderText(tr("Search for pollutant"));
     connect(filterPollutantInput, SIGNAL(textChanged(const QString&)), this, SLOT(applyFilter(const QString&)));
     addWidget(filterPollutantInput);
 
@@ -55,7 +55,7 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
     customProxyModel->setDynamicSortFilter(true);
     // specify pollutants allowed
     customProxyModel->setAllowedPollutants({"Nitrate-N", "Nitrate Filt", "Phosphate", "Orthophospht",
-        "Pb Filtered", "Lead - as Pb", "Pb BLM Bio", "Chloroform", "123TriClProp", "1,2,3-TCB"});
+                                            "Pb Filtered", "Lead - as Pb", "Pb BLM Bio", "Chloroform", "123TriClProp", "1,2,3-TCB"});
     customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     // add table for testing
@@ -69,9 +69,9 @@ PollutantOverviewPage::PollutantOverviewPage(WaterSampleTableModel* model, QWidg
 
     // add charts
     chart = new PollutantTrendLineChart({"Lead - as Pb", "Nitrate-N", "Nitrate Filt", "Phosphate", "Orthophospht",
-        "Pb Filtered", "Pb BLM Bio", "Chloroform", "123TriClProp", "1,2,3-TCB"}, customProxyModel);
-    chart->setVerticalAxisTitle("Pollutant Unit (mg/L)");
-    chart->setTitle("Pollutant Levels vs. Date");
+                                         "Pb Filtered", "Pb BLM Bio", "Chloroform", "123TriClProp", "1,2,3-TCB"}, customProxyModel);
+    chart->setVerticalAxisTitle(tr("Pollutant Unit (mg/L)"));
+    chart->setTitle(tr("Pollutant Levels vs. Date"));
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);
@@ -86,6 +86,5 @@ void PollutantOverviewPage::modelUpdated() {
 }
 
 void PollutantOverviewPage::applyFilter(const QString& text) {
-    std::cout << "applying pollutant filter" << std::endl;
     customProxyModel->setPollutantFilter(text);
 }

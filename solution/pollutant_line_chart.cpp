@@ -27,7 +27,7 @@ PollutantTrendLineChart::PollutantTrendLineChart(
     const QString& pollutant,
     QAbstractItemModel* model,
     QGraphicsItem *parent
-): QChart(parent)
+    ): QChart(parent)
 {
     legend()->hide();
     setAnimationOptions(QChart::AllAnimations);
@@ -96,7 +96,7 @@ void PollutantTrendLineChart::setAxes()
     auto axisX = new QDateTimeAxis;
     axisX->setTickCount(10);
     axisX->setFormat("MMM yyyy");
-    axisX->setTitleText("Date");
+    axisX->setTitleText(tr("Date"));
     axisX->setRange(std::get<0>(bounds), std::get<1>(bounds));
     addAxis(axisX, Qt::AlignBottom);
 

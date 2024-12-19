@@ -14,17 +14,17 @@
 #include "../pollutant_line_chart.hpp"
 
 class FluorinatedCompoundsPage: public Page {
-    public:
-        FluorinatedCompoundsPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
+public:
+    FluorinatedCompoundsPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
     
-    public slots:
-        void modelUpdated();
+public slots:
+    void modelUpdated();
 
-    private:
-        QLineEdit* filterPollutantInput;
-        CustomProxyModel* customFluorinatedProxyModel;
-        PollutantTrendLineChart* chart;
+private:
+    QLineEdit* filterPollutantInput;
+    CustomProxyModel* customFluorinatedProxyModel;
+    PollutantTrendLineChart* chart;
 
-    private slots:
-        void applyFilter(const QString& text);
+private slots:
+    void applyFilter(const QString& text);
 };

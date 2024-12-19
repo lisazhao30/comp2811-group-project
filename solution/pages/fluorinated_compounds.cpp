@@ -7,16 +7,16 @@ These compounds are often regulated due to their long-term environmental impacts
 */
 
 FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
-    addHeader2Text("Fluorinated Compounds:\nMonitoring PFAS Levels and Environmental Impact");
+    addHeader2Text(tr("Fluorinated Compounds:\nMonitoring PFAS Levels and Environmental Impact"));
 
     // hero description
-    QLabel* heroDescription = addParagraphText("View data on PFAS and other fluorinated pollutants, and\n"
-        "learn about their distribution and persistence in the\n"
-        "environment. View maps or time-series charts with colour-\n"
-        "coded markers to track levels and assess compliance with\n"
-        "safety thresholds. Rollover pop-ups offer additional\n"
-        "information on the environmental and health impacts of\n"
-        "these compounds.");
+    QLabel* heroDescription = addParagraphText(tr("View data on PFAS and other fluorinated pollutants, and\n"
+                                               "learn about their distribution and persistence in the\n"
+                                               "environment. View maps or time-series charts with colour-\n"
+                                               "coded markers to track levels and assess compliance with\n"
+                                               "safety thresholds. Rollover pop-ups offer additional\n"
+                                               "information on the environmental and health impacts of\n"
+                                               "these compounds."));
 
     // animation
     QLabel* gifLabel = new QLabel(this);
@@ -42,7 +42,7 @@ FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model,
     customFluorinatedProxyModel->setDynamicSortFilter(true);
     // specify pollutants allowed
     customFluorinatedProxyModel->setAllowedPollutants({"PFOS", "PFOS (B)", "PFHxS-L", "PFMOPrA",
-    "PFNS", "PFHxS-L","PFHpS"});
+                                                       "PFNS", "PFHxS-L","PFHpS"});
     customFluorinatedProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     // add table for testing
@@ -56,9 +56,9 @@ FluorinatedCompoundsPage::FluorinatedCompoundsPage(WaterSampleTableModel* model,
 
     // add charts
     chart = new PollutantTrendLineChart({"PFOS", "PFOS (B)", "PFHxS-L", "PFMOPrA",
-    "PFNS", "PFHxS-L","PFHpS"}, customFluorinatedProxyModel);
-    chart->setTitle("Fluorinated Compounds vs. Date");
-    chart->setVerticalAxisTitle("Fluorinated Compound Unit (ug/L)");
+                                         "PFNS", "PFHxS-L","PFHpS"}, customFluorinatedProxyModel);
+    chart->setTitle(tr("Fluorinated Compounds vs. Date"));
+    chart->setVerticalAxisTitle(tr("Fluorinated Compound Unit (ug/L)"));
     QChartView* chartView = new QChartView(chart);
     chartView->setMinimumHeight(400);
     addWidget(chartView);

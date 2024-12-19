@@ -7,11 +7,11 @@
 
 class NavBar: public QWidget
 {
-    public:
-        NavBar(QWidget* parent = nullptr);
-        void addTab(QStackedWidget* pages, const QString& label);
+public:
+    NavBar(QWidget* parent = nullptr);
+    void addTab(QStackedWidget* pages, const QString& label);
     
-    private:
-        QHBoxLayout* navBarLayout;
-        QTabBar* tabBar;
+private:
+    QHBoxLayout* navBarLayout;
+    QTabBar* tabBar;
 };

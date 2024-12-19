@@ -50,7 +50,7 @@ bool CustomProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &source
 
     bool waterBodyTypeMatch = true;
     if (!waterBodyFilterRegex.pattern().isEmpty()) {
-        waterBodyTypeMatch = sourceModel()->data(locationIndex).toString().contains(waterBodyFilterRegex);
+        waterBodyTypeMatch = sourceModel()->data(waterBodyIndex).toString().contains(waterBodyFilterRegex);
     }
 
     // std::cout << "Pollutant filter pattern: " << pollutantFilterRegex.pattern().toStdString() << std::endl;

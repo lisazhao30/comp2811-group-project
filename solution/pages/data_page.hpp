@@ -12,13 +12,13 @@
 class DataPage: public Page {
     Q_OBJECT
 
-    public:
-        DataPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
+public:
+    DataPage(WaterSampleTableModel* model, QWidget* parent = nullptr);
     
-    private:
-        QLineEdit* filterInput;
-        QSortFilterProxyModel* filterProxyModel;
+private:
+    QLineEdit* filterInput;
+    QSortFilterProxyModel* filterProxyModel;
     
-    private slots:
-        void applyFilter(const QString& text);
+private slots:
+    void applyFilter(const QString& text);
 };
