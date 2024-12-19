@@ -37,14 +37,12 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
 
     addHorizontalLayout(heroDescription, gifLabel, 20);
 
-    // // Inline autocomplete on search
-    // don't know if this can work for multiple columns?
-    // QCompleter* completer = new QCompleter(this);
-    // completer->setModel(model);
-    // completer->setCompletionColumn(5);
-    // completer->setCompletionMode(QCompleter::CompletionMode::InlineCompletion);
-    // completer->setCompletionRole(Qt::DisplayRole);
-    // completer->setCaseSensitivity(Qt::CaseInsensitive);
+    QCompleter* completer = new QCompleter(this);
+    completer->setModel(model);
+    completer->setCompletionColumn(5);
+    completer->setCompletionMode(QCompleter::CompletionMode::InlineCompletion);
+    completer->setCompletionRole(Qt::DisplayRole);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
 
     // pollutant filter
     QHBoxLayout* pollutantIconLayout = createHelpInfoPopup(
@@ -75,7 +73,7 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
     customProxyModel->setSourceModel(model);
     customProxyModel->setDynamicSortFilter(true);
     // specify pollutants allowed
-    customProxyModel->setAllowedPollutants({"Nitrate-N"});
+    customProxyModel->setAllowedPollutants({"Nitrate-N", "Phosphate", "PCB Con 028", "PFODA"});
     customProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     // add table for testing
@@ -87,12 +85,37 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
 
     addWidget(table);
 
-    // chart isn't refreshing???
-    scatterChart = new PollutantScatterChart("Nitrate-N", customProxyModel);
-    scatterChart->setTitle(tr("Compliance Overview"));
-    QChartView* scatterChartView = new QChartView(scatterChart);
-    scatterChartView->setMinimumHeight(400);
-    addWidget(scatterChartView);
+    // nitrates
+    nitrateScatterChart = new PollutantScatterChart("Nitrate-N", customProxyModel, 20.0, 20.0, 50.0, false);
+    nitrateScatterChart->setTitle(tr("Compliance of Nitrate-N Overview"));
+    nitrateScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (mg/L)"));
+    QChartView* nitrateScatterChartView = new QChartView(nitrateScatterChart);
+    nitrateScatterChartView->setMinimumHeight(400);
+    addWidget(nitrateScatterChartView);
+
+    // phosphates
+    phosphateScatterChart = new PollutantScatterChart("Phosphate", customProxyModel, 0.4, 0.2, 0.1, true);
+    phosphateScatterChart->setTitle(tr("Compliance of Phosphate Overview"));
+    phosphateScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (mg/L)"));
+    QChartView* phosphateScatterChartView = new QChartView(phosphateScatterChart);
+    phosphateScatterChartView->setMinimumHeight(400);
+    addWidget(phosphateScatterChartView);
+
+    // PCBs
+    pcbsScatterChart = new PollutantScatterChart("PCB Con 028", customProxyModel, 0.0, 0.3, 0.5, false);
+    pcbsScatterChart->setTitle(tr("Compliance of PCBs Overview"));
+    pcbsScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (µg/L)"));
+    QChartView* pcbsScatterChartView = new QChartView(pcbsScatterChart);
+    pcbsScatterChartView->setMinimumHeight(400);
+    addWidget(pcbsScatterChartView);
+
+    // fluorinated compounds
+    fluorinatedScatterChart = new PollutantScatterChart("PFODA", customProxyModel, 0, 0.05, 0.1, true);
+    fluorinatedScatterChart->setTitle(tr("Compliance of Fluorinated Compounds Overview"));
+    fluorinatedScatterChart->setVerticalAxisTitle(tr("Pollutant Unit (ng/L)"));
+    QChartView* fluorinatedScatterChartView = new QChartView(fluorinatedScatterChart);
+    fluorinatedScatterChartView->setMinimumHeight(400);
+    addWidget(fluorinatedScatterChartView);
 
     // footer credits
     addFooterCredits();
@@ -100,10 +123,25 @@ ComplianceDashboardPage::ComplianceDashboardPage(WaterSampleTableModel* model, Q
 
 void ComplianceDashboardPage::modelUpdated() {
     // Refreshes the chart
-    auto series1 = scatterChart->series().at(0);
-    scatterChart->removeSeries(series1);
-    scatterChart->addSeries(series1);
-    scatterChart->setAxes();
+    auto series1 = nitrateScatterChart->series().at(0);
+    nitrateScatterChart->removeSeries(series1);
+    nitrateScatterChart->addSeries(series1);
+    nitrateScatterChart->setAxes();
+
+    auto series2 = phosphateScatterChart->series().at(0);
+    phosphateScatterChart->removeSeries(series1);
+    phosphateScatterChart->addSeries(series1);
+    phosphateScatterChart->setAxes();
+
+    auto series3 = pcbsScatterChart->series().at(0);
+    pcbsScatterChart->removeSeries(series1);
+    pcbsScatterChart->addSeries(series1);
+    pcbsScatterChart->setAxes();
+
+    auto series4 = fluorinatedScatterChart->series().at(0);
+    fluorinatedScatterChart->removeSeries(series1);
+    fluorinatedScatterChart->addSeries(series1);
+    fluorinatedScatterChart->setAxes();
 }
 
 void ComplianceDashboardPage::applyFilter(const QString& text) {

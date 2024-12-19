@@ -3,7 +3,7 @@
 HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, parent) {
     pageLayout->setAlignment(Qt::AlignCenter);
     pageLayout->setContentsMargins(20, 20, 20, 20);
-    pageLayout->setSpacing(0);
+    pageLayout->setSpacing(10);
 
     // header components
     addHeaderText(tr("Spot the Trends, Shape the Future:\n"
@@ -127,6 +127,17 @@ HomePage::HomePage(WaterSampleTableModel* model, QWidget* parent): Page(model, p
     QChartView* chartView4 = new QChartView(chart4);
     chartView4->setMinimumHeight(400);
     grid->addWidget(chartView4, 1, 1);
+
+    // footer
+    QVBoxLayout* footerVerticalLayout = new QVBoxLayout;
+    QLabel* footerHeaderText = addHeader2Text(tr("Learn More"));
+    QLabel* footerSubtitleText = addSubtitleText(tr("Check out our help page for user guides, resources, and our data sources."));
+    footerHeaderText->setAlignment(Qt::AlignRight);
+    footerVerticalLayout->addWidget(footerHeaderText);
+    footerVerticalLayout->addWidget(footerSubtitleText);
+    footerVerticalLayout->setAlignment(Qt::AlignRight);
+    footerVerticalLayout->setSpacing(10);
+    pageLayout->addLayout(footerVerticalLayout, 0);
 
     // footer credits
     addFooterCredits();

@@ -31,6 +31,8 @@ public slots:
     void modelUpdated();
 
 private:
+    QLabel* addFooterLink(const QString& text, const QString& url, QObject* receiver, const char* slot);
+
     QLabel *fromLabel;
     QLabel *toLabel;
     QLineEdit* filterLocationInput;

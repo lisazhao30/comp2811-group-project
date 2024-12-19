@@ -30,7 +30,11 @@ private:
     QLineEdit* filterLocationInput;
     QSortFilterProxyModel* filterProxyModel;
     CustomProxyModel* customProxyModel;
-    PollutantScatterChart* scatterChart;
+    PollutantScatterChart* nitrateScatterChart;
+    PollutantScatterChart* phosphateScatterChart;
+    PollutantScatterChart* pcbsScatterChart;
+    PollutantScatterChart* fluorinatedScatterChart;
+
 
 private slots:
     void applyFilter(const QString& text);

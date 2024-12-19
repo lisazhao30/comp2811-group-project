@@ -57,6 +57,7 @@ QLabel* Page::addFooterCredits()
     QLabel* credits = createLabel("Made with ❤️ by University of Leeds Students", font, "color: black");
     credits->setAlignment(Qt::AlignCenter); 
     // place at bottom of page
+    pageLayout->addItem(new QSpacerItem(0, 60, QSizePolicy::Minimum, QSizePolicy::Expanding));
     pageLayout->addWidget(credits, 0, Qt::AlignCenter);
     return credits;
 }

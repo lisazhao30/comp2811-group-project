@@ -3,79 +3,132 @@
 
 PollutantScatterSeries::PollutantScatterSeries(
     const QString& pollutant,
-    QAbstractItemModel* model
-    )
-{
+    QAbstractItemModel* model,
+    QChart* chart,
+    double greenMax,      
+    double yellowMin,    
+    double yellowMax,
+    bool isReverseOrder 
+) : chart(chart) {
     timeSinceEpochProxyModel = new WaterSampleTableTimeSinceEpochProxy(this);
     timeSinceEpochProxyModel->setSourceModel(model);
 
-    // create proxy model for data
     filterProxyModel = new QSortFilterProxyModel(this);
     filterProxyModel->setSourceModel(timeSinceEpochProxyModel);
-    filterProxyModel->setFilterRegularExpression('^' + pollutant + '$');
+    filterProxyModel->setFilterRegularExpression("^" + pollutant + "$");
     filterProxyModel->setFilterKeyColumn(5);
     filterProxyModel->sort(4);
 
-    // create a scatter series
-    scatterSeries = new QScatterSeries();
-    scatterSeries->setName(pollutant);
-    scatterSeries->setMarkerSize(8); // Set marker size
+    // colour coded series
+    auto greenSeries = new QScatterSeries();
+    greenSeries->setName(pollutant + QString(" (≤ %1)").arg(greenMax));
+    greenSeries->setColor(QColor("green"));
+    greenSeries->setMarkerSize(8);
 
-    // iterate through each data point
-    for (int row = 0; row < filterProxyModel->rowCount(); ++row) {
-        QModelIndex dateIndex = filterProxyModel->index(row, 4); 
-        QModelIndex resultIndex = filterProxyModel->index(row, 9);  
+    auto yellowSeries = new QScatterSeries();
+    yellowSeries->setName(pollutant + QString(" (> %1 and ≤ %2)").arg(greenMax).arg(yellowMax));
+    yellowSeries->setColor(QColor("yellow"));
+    yellowSeries->setMarkerSize(8);
 
-        QVariant dateData = dateIndex.data();
-        QVariant resData = resultIndex.data();
+    auto redSeries = new QScatterSeries();
+    redSeries->setName(pollutant + QString(" (> %1)").arg(yellowMax));
+    redSeries->setColor(QColor("red"));
+    redSeries->setMarkerSize(8);
+    // qDebug() << "yellow " << yellowMax << "green " << greenMax;
+    // do cases for if below threshold then set points as red
+    // else if above threshold is negative then set points as red
+    if (isReverseOrder) {
+        for (int row = 0; row < filterProxyModel->rowCount(); ++row) {
+            QModelIndex dateIndex = filterProxyModel->index(row, 4); 
+            QModelIndex resultIndex = filterProxyModel->index(row, 9);  
 
-        if (dateData.isValid() && resData.isValid()) {
-            // convert everything to proper timestamp and res
-            qlonglong timestamp = dateData.toLongLong();  
-            QDateTime dateTime = QDateTime::fromMSecsSinceEpoch(timestamp); 
+            QVariant dateData = dateIndex.data();
+            QVariant resData = resultIndex.data();
 
-            // qDebug() << "Row:" << row << "Date:" << dateTime.toString("yyyy-MM-dd hh:mm:ss");
+            if (dateData.isValid() && resData.isValid()) {
+                qlonglong timestamp = dateData.toLongLong();
+                QDateTime dateTime = QDateTime::fromMSecsSinceEpoch(timestamp);
 
-            // add data to scatter series
-            scatterSeries->append(dateTime.toMSecsSinceEpoch(), resData.toDouble());
-            
-            // add compliance colours
-            double result = resData.toDouble();
-            QColor pointColor;
-
-            // picked an arbitrary value for green and yellow
-            if (result <= 30) {
-                pointColor = QColor("green");  // Compliant
-            } else if (result > 30 && result <= 50) {
-                pointColor = QColor("yellow");  // Warning
+                double result = resData.toDouble();
+                // qDebug() << "result bro " << result;
+                if (result >= greenMax) {
+                    greenSeries->append(dateTime.toMSecsSinceEpoch(), result);
+                } else if (result >= yellowMax && result < greenMax) {
+                    // qDebug() << "yellow hit ";
+                    yellowSeries->append(dateTime.toMSecsSinceEpoch(), result);
+                } else {
+                    redSeries->append(dateTime.toMSecsSinceEpoch(), result);
+                }
             } else {
-                pointColor = QColor("red");  // Non-compliant
+                qDebug() << "Invalid date or result data at row:" << row;
             }
+        }
+    } else {
+        for (int row = 0; row < filterProxyModel->rowCount(); ++row) {
+            QModelIndex dateIndex = filterProxyModel->index(row, 4); 
+            QModelIndex resultIndex = filterProxyModel->index(row, 9);  
 
-            scatterSeries->setBrush(pointColor);  
-        } else {
-            // qDebug() << "Invalid date or result data at row:" << row;
+            QVariant dateData = dateIndex.data();
+            QVariant resData = resultIndex.data();
+
+            if (dateData.isValid() && resData.isValid()) {
+                qlonglong timestamp = dateData.toLongLong();
+                QDateTime dateTime = QDateTime::fromMSecsSinceEpoch(timestamp);
+
+                double result = resData.toDouble();
+                // qDebug() << "result bro " << result;
+                if (result <= greenMax) {
+                    greenSeries->append(dateTime.toMSecsSinceEpoch(), result);
+                } else if (result > greenMax && result <= yellowMax) {
+                    // qDebug() << "yellow hit ";
+                    yellowSeries->append(dateTime.toMSecsSinceEpoch(), result);
+                } else {
+                    redSeries->append(dateTime.toMSecsSinceEpoch(), result);
+                }
+            } else {
+                qDebug() << "Invalid date or result data at row:" << row;
+            }
         }
     }
 
-    // qDebug() << "points appended to scatter series: " << scatterSeries->count();
+    // qDebug() << "Series count before adding: " << chart->series().count();
+
+    chart->addSeries(greenSeries);
+    chart->addSeries(yellowSeries);
+    chart->addSeries(redSeries);
+    // qDebug() << "Series count after adding: " << chart->series().count();
+    // qDebug() << "Green series points:" << greenSeries->points();
+    // qDebug() << "Yellow series points:" << yellowSeries->points();
+    // qDebug() << "Red series points:" << redSeries->points();
+    chart->update();
+
 }
 
+// Constructor for PollutantScatterChart with thresholds
 PollutantScatterChart::PollutantScatterChart(
     const QString& pollutant,
     QAbstractItemModel* model,
+    double greenMax,
+    double yellowMin,
+    double yellowMax,
+    bool isReverseOrder,
     QGraphicsItem *parent
-    ): QChart(parent)
-{
+) : QChart(parent) {
     legend()->hide();
     setAnimationOptions(QChart::AllAnimations);
-    pollutant_series = new PollutantScatterSeries(pollutant, model);
-    addSeries(pollutant_series->getScatterSeries());  
+
+    pollutant_series = new PollutantScatterSeries(pollutant, model, this, greenMax, yellowMin, yellowMax, isReverseOrder);
     setAxes();
 }
 
-void PollutantScatterChart::setAxes()
+// manually call setAxes() again to update it
+void PollutantScatterChart::setVerticalAxisTitle(const QString &title)
 {
+    verticalTitle = title;
+    setAxes();
+}
+
+void PollutantScatterChart::setAxes() {
     for (auto axis : axes()) {
         removeAxis(axis);
     }
@@ -85,37 +138,41 @@ void PollutantScatterChart::setAxes()
     axisX->setFormat("MMM yyyy");
     axisX->setTitleText(tr("Date"));
 
-    QDateTime minDate = QDateTime::fromMSecsSinceEpoch(pollutant_series->getScatterSeries()->at(0).x());
-    QDateTime maxDate = QDateTime::fromMSecsSinceEpoch(pollutant_series->getScatterSeries()->at(0).x());
-    for (int i = 1; i < pollutant_series->getScatterSeries()->count(); ++i) {
-        QDateTime currentDate = QDateTime::fromMSecsSinceEpoch(pollutant_series->getScatterSeries()->at(i).x());
-        if (currentDate < minDate) minDate = currentDate;
-        if (currentDate > maxDate) maxDate = currentDate;
-    }
-
-    // try to add padding to axis (not working)
-    int paddingDays = 14; 
-    minDate = minDate.addDays(-paddingDays);
-    maxDate = maxDate.addDays(paddingDays);
-
-    axisX->setRange(minDate, maxDate);
-    addAxis(axisX, Qt::AlignBottom);
-    pollutant_series->attachAxis(axisX);
-
     auto axisY = new QValueAxis;
     axisY->setLabelFormat("%.2f");
-    axisY->setTitleText(tr("Result"));
+    axisY->setTitleText(verticalTitle);
 
-    double minY = pollutant_series->getScatterSeries()->at(0).y();
-    double maxY = pollutant_series->getScatterSeries()->at(0).y();
-    for (int i = 1; i < pollutant_series->getScatterSeries()->count(); ++i) {
-        double currentY = pollutant_series->getScatterSeries()->at(i).y();
-        if (currentY < minY) minY = currentY;
-        if (currentY > maxY) maxY = currentY;
+    double minY = std::numeric_limits<double>::max();
+    double maxY = std::numeric_limits<double>::lowest();
+    QDateTime minDate, maxDate;
+
+    for (auto series : this->series()) {
+        QScatterSeries* scatterSeries = qobject_cast<QScatterSeries*>(series);
+        if (!scatterSeries || scatterSeries->count() == 0) continue;
+
+        for (const QPointF& point : scatterSeries->points()) {
+            QDateTime currentDate = QDateTime::fromMSecsSinceEpoch(point.x());
+            double currentY = point.y();
+
+            if (minDate.isNull() || currentDate < minDate) minDate = currentDate;
+            if (maxDate.isNull() || currentDate > maxDate) maxDate = currentDate;
+
+            if (currentY < minY) minY = currentY;
+            if (currentY > maxY) maxY = currentY;
+        }
     }
-    
-    // padding still doesn't work
-    axisY->setRange(minY - 10, maxY + 10);  
+
+    axisX->setRange(minDate, maxDate);
+    axisY->setRange(minY, maxY);
+
+    addAxis(axisX, Qt::AlignBottom);
     addAxis(axisY, Qt::AlignLeft);
-    pollutant_series->attachAxis(axisY);
+
+    for (auto series : this->series()) {
+        QScatterSeries* scatterSeries = qobject_cast<QScatterSeries*>(series);
+        if (!scatterSeries) continue;
+
+        scatterSeries->attachAxis(axisX);
+        scatterSeries->attachAxis(axisY);
+    }
 }
